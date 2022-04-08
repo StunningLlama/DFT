@@ -1,9 +1,9 @@
-molecule = 4
+molecule = 1
 if (molecule==1) % Dihelium
-    X=[8 8 8; 8+1.5 8 8];
+    X=[6 6 9; 6+1.5 6 9];
     setup(X, 1, [1 1]);
-    [W,E1] = iterate();
-    visualize(W);
+    [W,E1] = iterate(20);
+    visualize(W, X);
 elseif (molecule==2) % Dihelium
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2]);

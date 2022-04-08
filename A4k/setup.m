@@ -2,11 +2,11 @@ function setup(X, Ns, Z)
 global gbl_S; global gbl_R; global gbl_G2; global gbl_Ns;
 global gbl_G2c; global gbl_active; global gbl_X; global gbl_G; global gbl_Gc; global gbl_Sf; global gbl_M; global gbl_r; global gbl_Z;
 global gbl_Vps;
-S=[64; 64; 64];
+S=[60; 64; 68];
 %a=5.66/0.52917721;
 
 %R=a*diag(ones(3,1));
-R = diag([4; 4; 4]);
+R = diag([16; 16; 16]);
 
 gbl_X = X;
 gbl_Z = Z;
@@ -16,7 +16,6 @@ m2=rem(floor(ms/S(1)),S(2));
 m3=rem(floor(ms/(S(1)*S(2))),S(3));
 M=[m1, m2, m3];
 gbl_M = M;
-
 n1=m1-(m1>S(1)/2)*S(1);
 n2=m2-(m2>S(2)/2)*S(2);
 n3=m3-(m3>S(3)/2)*S(3);
@@ -64,9 +63,9 @@ gbl_Vdual = Vdual;
 
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-gbl_kpoints = 3;
-gbl_kvectors = [0.25 0 0; 0 0.25 0; 0 0 0.25]*2*pi*inv(R);
-gbl_weights = [1/3 1/3 1/3];
+gbl_kpoints = 1;
+gbl_kvectors = [0 0 0]*2*pi*inv(R);
+gbl_weights = [1];
 
 
 % 
