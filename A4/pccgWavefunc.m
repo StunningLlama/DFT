@@ -34,7 +34,7 @@ for it = 1:1:Nit
     gtnorm = norm(gt)/prod(size(gt));
     disp2(gtnorm);
     if (it > 10)
-        if (gtnorm < 1e-10)
+        if (gtnorm < 1e-7)
             break;
         end
     end
