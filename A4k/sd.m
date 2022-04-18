@@ -1,12 +1,32 @@
-function [out, Elist]=sd(W, Nit)
+function out=sd(W, Nit)
 W = orthonormalize(W);
-Elist = zeros(Nit, 1);
 out = W;
-alpha = 1.5e-3;
+alpha = 0.001;
+%Eprev = 10000;
 for it = 1:1:Nit
-    out = out - alpha*getgrad(out);
-    disp("Doing something");
-    Elist(it)=getE(out); %# <= New statements
-    Elist(it)
+    alphahigh = alpha*1.2;
+    alphalow = alpha/1.2;
+    outhigh = out - alphahigh*K(getgrad(out));
+    outlow = out - alphalow*K(getgrad(out));
+    Ehigh = getE(outhigh);
+    Elow = getE(outlow);
+    if (Elow < Ehigh)
+        out = outlow;
+        alpha = alphalow;
+        Elow
+    else
+        out = outhigh;
+        alpha = alphahigh;
+        Ehigh
+    end
+    alpha
+    
+    
+    
+%     out = out - alpha*K(getgrad(out));
+%     E = getE(K(out))
+    %disp("Doing something");
+    %Eprev = E;
 end
+out = K(out);
 end

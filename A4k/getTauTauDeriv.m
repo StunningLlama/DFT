@@ -4,7 +4,7 @@ global gbl_G;
 global gbl_Vps;
 G = gbl_G;
 Y=W*inv(sqrtm(W'*O(W)));
-n = getn(cI(Y), gbl_f);
+n = getn(Y, gbl_f);
 dSf = getdsqSf(X, dXa, dXb);
 dVtilde = gbl_Vps.*dSf;
 dVtilde(1)=0.;

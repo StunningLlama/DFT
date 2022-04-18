@@ -1,13 +1,17 @@
-function setup(X, Ns, Z)
+function setup(X, Ns, Z, big)
 global gbl_S; global gbl_R; global gbl_G2; global gbl_Ns;
 global gbl_G2c; global gbl_active; global gbl_X; global gbl_G; global gbl_Gc; global gbl_Sf; global gbl_M; global gbl_r; global gbl_Z;
 global gbl_Vps;
-S=[60; 64; 68];
+S=[64; 64; 64];
 %a=5.66/0.52917721;
 
 %R=a*diag(ones(3,1));
-R = diag([16; 16; 16]);
-
+if (big == 1)
+    R = diag([16; 16; 16]);
+    disp('big');
+else
+    R = diag([3; 3; 3]);
+end
 gbl_X = X;
 gbl_Z = Z;
 ms=[0:prod(S)-1]';
@@ -63,9 +67,13 @@ gbl_Vdual = Vdual;
 
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-gbl_kpoints = 1;
-gbl_kvectors = [0 0 0]*2*pi*inv(R);
-gbl_weights = [1];
+% gbl_kpoints = 1;
+% gbl_kvectors = [0 0 0]*2*pi*inv(R);
+% gbl_weights = [1];
+
+gbl_kpoints = 3;
+gbl_kvectors = [0 0 0; 0.25 0 0; 0 0 0.25]*2*pi*inv(R);
+gbl_weights = [1/3, 1/3, 1/3];
 
 
 % 

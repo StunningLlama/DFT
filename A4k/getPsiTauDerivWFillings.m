@@ -12,6 +12,8 @@ global gbl_UsiFUsi;
 global gbl_WUsiFUsi;
 global gbl_HFmFH;
 global gbl_QHFmFH;
+global gbl_kpoints;
+global gbl_weights;
 
 F = diag(gbl_f);
 
@@ -26,8 +28,14 @@ WUsiFUsi = gbl_WUsiFUsi;
 HFmFH = gbl_HFmFH;
 QHFmFH = gbl_QHFmFH;
 
-dHtilde = Usqrtinv*W'*dHtau(W*Usqrtinv, dTau);
+dHtilde = [];
+dwGradE = [];
 
-tmp = dHtau(W*Usqrtinv*F*Usqrtinv, dTau);
-dwGradE = tmp-O(W*Uinv*(W'*tmp)) + O(Y*Q(dHtilde*F-F*dHtilde, U));
+for k = [1:gbl_kpoints]
+    dHtilde(:,:,k) = Usqrtinv(:,:,k)*W(:,:,k)'*dHtau(W(:,:,k)*Usqrtinv(:,:,k), dTau);
+    
+    tmp = dHtau(W(:,:,k)*Usqrtinv(:,:,k)*F*Usqrtinv(:,:,k), dTau);
+    dwGradE(:,:,k) = tmp-O(W(:,:,k)*Uinv(:,:,k)*(W(:,:,k)'*tmp)) + O(Y(:,:,k)*Q(dHtilde(:,:,k)*F-F*dHtilde(:,:,k), U(:,:,k)));
+    dwGradE(:,:,k) = dwGradE(:,:,k)*gbl_weights(k);
+end
 end

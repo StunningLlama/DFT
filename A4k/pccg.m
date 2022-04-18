@@ -10,11 +10,11 @@ for it = 1:1:Nit
         
         beta = 0;
         if (cgform == 1)
-            beta = (real(sum(conj(g).*K(g), 'All'))/real(sum(conj(gprev).*K(gprev), 'All')));
+            beta = (real(sumall(conj(g).*K(g)))/real(sumall(conj(gprev).*K(gprev))));
         elseif (cgform == 2)
-            beta = (real(sum(conj(g-gprev).*K(g), 'All'))/real(sum(conj(gprev).*K(gprev), 'All')));
+            beta = (real(sumall(conj(g-gprev).*K(g)))/real(sumall(conj(gprev).*K(gprev))));
         elseif (cgform == 3)
-            beta = (real(sum(conj(g-gprev).*K(g), 'All'))/real(sum(conj(g-gprev).*dprev), 'All'));
+            beta = (real(sumall(conj(g-gprev).*K(g)))/real(sumall(conj(g-gprev).*dprev)));
         end
         d = -K(g) + beta*dprev;
     else
@@ -22,12 +22,12 @@ for it = 1:1:Nit
     end
     
     gt = getgrad(W+alphat*d);
-    alpha = alphat*(real(sum(conj(g).*d, 'All')))/(real(sum(conj(g-gt).*d, 'All')));
+    alpha = alphat*(real(sumall(conj(g).*d)))/(real(sumall(conj(g-gt).*d)));
     W = W + alpha*d;
     gprev = g;
     dprev = d;
     disp(getE(W)); %# <= New statements
-    gtnorm = sqrt(sum(abs(gt).^2, 'All'))/prod(size(gt));
+    gtnorm = sqrt(sumall(abs(gt).^2))/prod(size(gt));
     %disp2(gtnorm);
     if (it > 2)
         if (gtnorm < 1e-10)

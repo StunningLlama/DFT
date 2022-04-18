@@ -15,11 +15,11 @@ for it = 1:1:Nit
         
         beta = 0;
         if (cgform == 1)
-            beta = (real(trace(g'*K(g)))/real(trace(gprev'*K(gprev))));
+            beta = (real(sumall(conj(g).*K(g)))/real(sumall(conj(gprev).*K(gprev))));
         elseif (cgform == 2)
-            beta = (real(trace((g-gprev)'*K(g)))/real(trace(gprev'*K(gprev))));
+            beta = (real(sumall(conj(g-gprev).*K(g)))/real(sumall(conj(gprev).*K(gprev))));
         elseif (cgform == 3)
-            beta = (real(trace((g-gprev)'*K(g)))/real(trace((g-gprev)'*dprev)));
+            beta = (real(sumall(conj(g-gprev).*K(g)))/real(sumall(conj(g-gprev).*dprev)));
         end
         d = -K(g) + beta*dprev;
     else
@@ -27,11 +27,11 @@ for it = 1:1:Nit
     end
     
     gt = getPsiPsiDerivWFillings(W, dW+alphat*d) - b;
-    alpha = alphat*(real(trace(g'*d)))/(real(trace((g-gt)'*d)));
+    alpha = alphat*(real(sumall(conj(g).*d)))/(real(sumall(conj(g-gt).*d)));
     dW = dW + alpha*d;
     gprev = g;
     dprev = d;
-    gtnorm = norm(gt)/prod(size(gt));
+    gtnorm = sqrt(sumall(abs(gt).^2))/prod(size(gt));
     disp2(gtnorm);
     if (it > 10)
         if (gtnorm < 1e-10)

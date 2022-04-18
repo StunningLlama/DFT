@@ -12,6 +12,9 @@ global gbl_WUsiFUsi;
 global gbl_HFmFH;
 global gbl_QHFmFH;
 global gbl_HWUsi;
+global gbl_IY;
+global gbl_kpoints;
+global gbl_weights;
 
 F = diag(gbl_f);
 
@@ -27,20 +30,36 @@ HFmFH = gbl_HFmFH; %~HF - F~H
 QHFmFH = gbl_QHFmFH; %Q(~HF - F~H)
 HWUsi= gbl_HWUsi;
 
-dUinv= -Uinv*(dW'*O(W) + W'*O(dW))*Uinv;
-dU = dW'*O(W) + W'*O(dW);
-dUsqrtinv = Q(dUinv, Uinv);
-dY = dW*Usqrtinv+W*dUsqrtinv;
+dUinv = [];
+dU = [];
+dUsqrtinv = [];
+dY = [];
+cIdY = [];
+dHtilde = [];
+dwGradE = [];
 
-dHW = dH(W, dW, Y, dY);
-dHtilde = (dUsqrtinv*W'+Usqrtinv*dW')*HWUsi;
-dHtilde = dHtilde+dHtilde'+Usqrtinv*(W'*dHW)*Usqrtinv;
-        %Todo think about this term.
-tmp2 = dHW*UsiFUsi + H2(WUsiFUsi, dW*UsiFUsi + W*dUsqrtinv*F*Usqrtinv+W*Usqrtinv*F*dUsqrtinv);
-% disp2(dH(W*Usqrtinv*F*Usqrtinv, dW*Usqrtinv*F*Usqrtinv));
-% disp2(H2(W*Usqrtinv*F*Usqrtinv, dW*Usqrtinv*F*Usqrtinv + W*dUsqrtinv*F*Usqrtinv+W*Usqrtinv*F*dUsqrtinv));
-% disp2(tmp1);
-% disp2(tmp2);
-dwGradE = -O(dW*Uinv*(W'*tmp1) + W*dUinv*(W'*tmp1) + W*Uinv*(dW'*tmp1)) + tmp2 - O(W*(Uinv*(W'*tmp2))) ...
-    + O(dY*QHFmFH + Y*Q(dHtilde*F-F*dHtilde, U) + Y*dQ(HFmFH, U, dU));
+for k = [1:gbl_kpoints]
+    dUinv(:,:,k) = -Uinv(:,:,k)*(dW(:,:,k)'*O(W(:,:,k)) + W(:,:,k)'*O(dW(:,:,k)))*Uinv(:,:,k);
+    dU(:,:,k) = dW(:,:,k)'*O(W(:,:,k)) + W(:,:,k)'*O(dW(:,:,k));
+    dUsqrtinv(:,:,k) = Q(dUinv(:,:,k), Uinv(:,:,k));
+    dY(:,:,k) = dW(:,:,k)*Usqrtinv(:,:,k)+W(:,:,k)*dUsqrtinv(:,:,k);
+    cIdY(:,:,k) = cI(dY(:,:,k));
+end
+
+dn = getdn(gbl_IY, cIdY, gbl_f);
+
+for k = [1:gbl_kpoints]
+    dHW(:,:,k) = dH(Y(:,:,k), dn, k);
+end
+
+for k = [1:gbl_kpoints]
+    dHtilde(:,:,k) = (dUsqrtinv(:,:,k)*W(:,:,k)'+Usqrtinv(:,:,k)*dW(:,:,k)')*HWUsi(:,:,k);
+    dHtilde(:,:,k) = dHtilde(:,:,k)+dHtilde(:,:,k)'+Usqrtinv(:,:,k)*(W(:,:,k)'*dHW(:,:,k))*Usqrtinv(:,:,k);
+    
+    tmp2(:,:,k) = dHW(:,:,k)*UsiFUsi(:,:,k) + H2(WUsiFUsi(:,:,k), dW(:,:,k)*UsiFUsi(:,:,k) + W(:,:,k)*dUsqrtinv(:,:,k)*F*Usqrtinv(:,:,k)+W(:,:,k)*Usqrtinv(:,:,k)*F*dUsqrtinv(:,:,k), k);
+    
+    dwGradE(:,:,k) = -O(dW(:,:,k)*Uinv(:,:,k)*(W(:,:,k)'*tmp1(:,:,k)) + W(:,:,k)*dUinv(:,:,k)*(W(:,:,k)'*tmp1(:,:,k)) + W(:,:,k)*Uinv(:,:,k)*(dW(:,:,k)'*tmp1(:,:,k))) + tmp2(:,:,k) - O(W(:,:,k)*(Uinv(:,:,k)*(W(:,:,k)'*tmp2(:,:,k)))) ...
+        + O(dY(:,:,k)*QHFmFH(:,:,k) + Y(:,:,k)*Q(dHtilde(:,:,k)*F-F*dHtilde(:,:,k), U(:,:,k)) + Y(:,:,k)*dQ(HFmFH(:,:,k), U(:,:,k), dU(:,:,k)));
+    dwGradE(:,:,k) = dwGradE(:,:,k)*gbl_weights(k);
+end
 end
