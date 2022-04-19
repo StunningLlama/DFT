@@ -21,6 +21,7 @@ global gbl_IW;
 global gbl_IY;
 global gbl_kpoints;
 global gbl_weights;
+global gbl_W;
 
 gbl_U = [];
 gbl_Uinv = [];
@@ -34,6 +35,7 @@ gbl_HFmFH = [];
 gbl_QHFmFH = [];
 gbl_HWUsi = [];
 
+gbl_W = W;
 for k = [1:gbl_kpoints]
     gbl_U(:,:,k) = W(:,:,k)'*O(W(:,:,k));
     gbl_Uinv(:,:,k) = inv(gbl_U(:,:,k));

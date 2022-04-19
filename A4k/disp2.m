@@ -1,7 +1,7 @@
 function disp2(A)
 vertdim = size(A,1);
 horizdim = size(A,2);
-disp(inputname(1) + ": " + num2str(vertdim) + "*" + num2str(horizdim) + " matrix.");
+disp(strcat(inputname(1), ": ", num2str(vertdim), "*", num2str(horizdim), " matrix."));
 maxdim = 6;
 if (horizdim < maxdim)
     horizlist = [1:horizdim];

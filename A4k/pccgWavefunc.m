@@ -4,10 +4,10 @@ function out=pccgWavefunc(W, dTau, Nit, cgform)
 %W = W*sqrtm(inv(W'*O(W)));
 alphat = 3e-5;
 
-b = -getPsiTauDerivWFillings(W, dTau);
+b = -getPsiTauDerivWFillings(dTau);
 dW = b;
 for it = 1:1:Nit
-    g = getPsiPsiDerivWFillings(W, dW) - b;
+    g = getPsiPsiDerivWFillings(dW) - b;
     
     if (it > 1)
 %        disp("Angle cosine: " + num2str(real(trace(g'*d))/sqrt(real(trace(g'*g))*real(trace(d'*d)))));
@@ -26,7 +26,7 @@ for it = 1:1:Nit
         d = -K(g);
     end
     
-    gt = getPsiPsiDerivWFillings(W, dW+alphat*d) - b;
+    gt = getPsiPsiDerivWFillings(dW+alphat*d) - b;
     alpha = alphat*(real(sumall(conj(g).*d)))/(real(sumall(conj(g-gt).*d)));
     dW = dW + alpha*d;
     gprev = g;

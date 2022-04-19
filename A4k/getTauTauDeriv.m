@@ -1,11 +1,12 @@
-function dXdXE = getTauTauDeriv(W, X, dXa, dXb)
+function dXdXE = getTauTauDeriv(dXa, dXb)
 global gbl_f;
 global gbl_G;
 global gbl_Vps;
+global gbl_n;
+global gbl_X;
 G = gbl_G;
-Y=W*inv(sqrtm(W'*O(W)));
-n = getn(Y, gbl_f);
-dSf = getdsqSf(X, dXa, dXb);
+n = gbl_n;
+dSf = getdsqSf(gbl_X, dXa, dXb);
 dVtilde = gbl_Vps.*dSf;
 dVtilde(1)=0.;
 dVdual=cJ(dVtilde);

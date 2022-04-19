@@ -1,5 +1,5 @@
 % Calculates differential of grad E given differential dW.
-function dwGradE = getPsiPsiDerivWFillings(W, dW)
+function dwGradE = getPsiPsiDerivWFillings(dW)
 global gbl_f;
 global gbl_U;
 global gbl_Uinv;
@@ -15,6 +15,7 @@ global gbl_HWUsi;
 global gbl_IY;
 global gbl_kpoints;
 global gbl_weights;
+global gbl_W;
 
 F = diag(gbl_f);
 
@@ -29,6 +30,7 @@ WUsiFUsi = gbl_WUsiFUsi; %WU^(-1/2)FU^(-1/2)
 HFmFH = gbl_HFmFH; %~HF - F~H
 QHFmFH = gbl_QHFmFH; %Q(~HF - F~H)
 HWUsi= gbl_HWUsi;
+W = gbl_W;
 
 dUinv = [];
 dU = [];

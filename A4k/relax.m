@@ -1,3 +1,5 @@
+%warning("off", "Octave:divide-by-zero");
+
 %function relax()
 
 % bondlen = 108.7*0.0188972599;
@@ -33,14 +35,14 @@ for a = 1:(3*numatoms)
     dXi = reshape(dXi, [numatoms, 3]);
     dX(:,:,a) = dXi;
     dWi = pccgWavefunc(W, dXi, 50, 1);
-    dW(:,:,a) = dWi;
+    dW(:,:,:,a) = dWi;
 end
 
 Kanal = zeros(3*numatoms, 3*numatoms);
 
 for a = 1:(3*numatoms)
     for b = a:(3*numatoms)
-        kab = calcSpringConstant(W, X, dX(:,:,a), dX(:,:,b), dW(:,:,a), dW(:,:,b))-getdsqEwald(X, dX(:,:,a), dX(:,:,b))
+        kab = calcSpringConstant(W, X, dX(:,:,a), dX(:,:,b), dW(:,:,:,a), dW(:,:,:,b))-getdsqEwald(X, dX(:,:,a), dX(:,:,b))
         Kanal(a,b)=kab;
         Kanal(b,a)=kab;
     end
@@ -58,8 +60,8 @@ for a = 1:(3*numatoms)
     dXi(a)=1;
     dXi = reshape(dXi, [numatoms, 3]);
     setup(X+h*dXi, nstates, Z, true);
-    Wp(:,:,a) = pccg(W,50,1);
-    E(a) = getE(Wp(:,:,a)) + ewald();
+    Wp(:,:,:,a) = pccg(W,50,1);
+    E(a) = getE(Wp(:,:,:,a)) + ewald();
 end
 
 for a = 1:(3*numatoms)

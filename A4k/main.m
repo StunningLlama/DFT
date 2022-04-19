@@ -1,4 +1,4 @@
-test = 3
+test = 7
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
@@ -41,8 +41,8 @@ elseif (test == 2) % Direct FD test of dPsiPsi
     deltaE
     
     setupPccgWavefunc(W);
-    dwGradE = getPsiPsiDerivWFillings(W, dWb);
-    2*real(trace(dWa'*dwGradE))
+    dwGradE = getPsiPsiDerivWFillings(dWb);
+    2*real(sumall(conj(dWa).*dwGradE))
     %dGrad = getgrad(W+dWa) - getgrad(W);
     %dGrad2 = getPsiPsiDeriv(W, dWa);
     
@@ -73,7 +73,7 @@ elseif (test == 2.5) % Direct FD test of dPsiPsi
     dGrad = getgrad(W+dWa) - getgrad(W);
     setupPccgWavefunc(W);
     disp("Phase 2:");
-    dGrad2 = getPsiPsiDerivWFillings(W, dWa);
+    dGrad2 = getPsiPsiDerivWFillings(dWa);
     %dGrad3 = getPsiPsiDeriv(W, dWa);
     disp2(dGrad);
     disp2(dGrad2);
@@ -100,8 +100,8 @@ elseif (test==3) %FD test dTau
     dGrad = Grad2-Grad1;
     
     setup(X, 1, 1, true);
-    dGradAnal = getPsiTauDerivWFillings(W, dX);
-    dGradAnal2 = getPsiTauDeriv(W, dX);
+    dGradAnal = getPsiTauDerivWFillings(dX);
+    %dGradAnal2 = getPsiTauDeriv(W, dX);
 elseif (test==4)
     X=[8 8 8; 8+2 8 8];
     setup(X, 1, 1, true);
@@ -201,6 +201,9 @@ elseif (test == 7) % Direct FD test of dTauTau
     global gbl_kpoints;
     W=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
     
+    setupPccgWavefunc(W);
+    dxGradE = getTauTauDeriv(dXa, dXb)
+    
     E1=getE(W);
     setup(X+dXa, 1, 1, true);
     E2=getE(W);
@@ -210,7 +213,6 @@ elseif (test == 7) % Direct FD test of dTauTau
     E4=getE(W);
     deltaE = E4-E3-E2+E1;
     deltaE
-    dxGradE = getTauTauDeriv(W, X, dXa, dXb)
     
     %dWa = dWa*0.000000;
     %dWb = dWb*0.000000;
