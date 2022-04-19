@@ -1,4 +1,4 @@
-test = 1
+test = 10
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
