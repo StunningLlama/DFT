@@ -1,4 +1,4 @@
-test = 7
+test = 1
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
@@ -8,6 +8,7 @@ elseif (test == 1) % Test atomic force calculation
     X=[8 8 8; 8+2 8 8];
     setup(X, 1, 1, true);
     W1 = iterate(20);
+    setupPccgWavefunc(W1);
     E1 = getE(W1) + ewald();
     F = getForces(W1);
     ds=0.01;

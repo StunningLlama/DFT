@@ -1,5 +1,6 @@
 function F = getForces(W)
 global gbl_S; global gbl_R; global gbl_G2; global gbl_X; global gbl_G; global gbl_Sf; global gbl_X; global gbl_f; global gbl_r; global gbl_Z;
+global gbl_n;
 S = gbl_S;
 R = gbl_R;
 G2 = gbl_G2;
@@ -9,10 +10,7 @@ Sf = gbl_Sf;
 X = gbl_X;
 r = gbl_r;
 Z = gbl_Z;
-
-dE = zeros(size(X));
-Y=W*inv(sqrtm(W'*O(W)));
-n = getn(cI(Y), gbl_f);
+n = gbl_n;
 
 dr= sqrt(sum((r - ones(prod(S), 1)*sum(R,2)'/2).^2, 2));
 sigma1=0.25;
