@@ -65,20 +65,19 @@ global gbl_Vdual;
 global gbl_f;
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-% gbl_kpoints = 1;
-% gbl_kvectors = [0 0 0]*2*pi*inv(R);
-% gbl_weights = [1];
+gbl_kpoints = 1;
+gbl_kvectors = [0 0 0]*2*pi*inv(R);
+gbl_weights = [1];
 
-Kb = [3 3 3]
-ks=[0:prod(Kb)-1]';
-k1=rem(ks,Kb(1));
-k2=rem(floor(ks/Kb(1)),Kb(2));
-k3=rem(floor(ks/(Kb(1)*Kb(2))),Kb(3));
-K=([k1, k2, k3]-1)*1/3;
-%K
-gbl_kpoints = 27;
-gbl_kvectors = K*2*pi*inv(R);
-gbl_weights = ones(1, 27)/27;
+% Kb = [3 3 3]
+% ks=[0:prod(Kb)-1]';
+% k1=rem(ks,Kb(1));
+% k2=rem(floor(ks/Kb(1)),Kb(2));
+% k3=rem(floor(ks/(Kb(1)*Kb(2))),Kb(3));
+% K=([k1, k2, k3]-1)*1/3;
+% gbl_kpoints = 27;
+% gbl_kvectors = K*2*pi*inv(R);
+% gbl_weights = ones(1, 27)/27;
 
 Ns=4; %# Number of states
 gbl_Ns = Ns;

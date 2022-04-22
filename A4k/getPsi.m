@@ -14,10 +14,11 @@ end
 
 n = getn(Y, gbl_f);
 Psi=zeros(size(Y));
+epsilon = [];
 
 for k = [1:gbl_kpoints]
     mu = Y(:,:,k)'*H(Y(:,:,k), n, k);
-    [D, epsilon]=eig(mu);
-    epsilon=real(diag(epsilon));
+    [D, eigenvalues]=eig(mu);
+    epsilon(:,k)=real(diag(eigenvalues));
 	Psi(:,:,k) = Y(:,:,k)*D;
 end

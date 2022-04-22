@@ -69,6 +69,9 @@ gbl_kpoints = 8;
 gbl_kvectors = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5]*2*pi*inv(R);
 gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
 
+disp2(gbl_Gc);
+disp2(gbl_kvectors);
+
 % Kb = [3 3 3]
 % ks=[0:prod(Kb)-1]';
 % k1=rem(ks,Kb(1));
