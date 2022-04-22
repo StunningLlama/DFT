@@ -24,13 +24,13 @@ excpn = gbl_excpn;
 excppn = gbl_excppn;
 JdagOJn = gbl_JdagOJn;
 IW = gbl_IW;
-IY = gbl_IY;
 out = zeros(size(Y));
 OJdN=O(cJ(dn));
-for col=1:size(Y,2)
-out(:,col) = out(:,col) + cIdag(Diagprod(cJdag(O(-4*pi*Linv(OJdN))) ...
+lhs = cJdag(O(-4*pi*Linv(OJdN))) ...
     + cJdag(O(cJ(excpn.*dn))) ...
     + Diagprod(excppn.*dn, JdagOJn) ...
-    + Diagprod(excpn, cJdag(OJdN)), IW(:,col,k)));
+    + Diagprod(excpn, cJdag(OJdN));
+for col=1:size(Y,2)
+out(:,col) = out(:,col) + cIdag(Diagprod(lhs, IW(:,col,k)));
 end
 end

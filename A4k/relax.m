@@ -2,22 +2,22 @@
 
 %function relax()
 
-% bondlen = 108.7*0.0188972599;
-% angle0 = deg2rad(109.5);
-% angle1 = deg2rad(0);
-% angle2 = deg2rad(120);
-% angle3 = deg2rad(240);
-% X=[8 8 8; 8 8 8; 8 8 8; 8 8 8; 8 8 8] + bondlen*[0 0 0; cos(angle1) sin(angle1) cos(angle0); cos(angle2) sin(angle2) cos(angle0); cos(angle3) sin(angle3) cos(angle0); 0 1 0];
-% Z = [6 1 1 1 1];
-% nstates = 5;
-% setup(X, nstates, Z);
-% numatoms = 5;
-
-X=[8 8 8; 8+1.55 8 8];
-nstates = 1;
-Z = [1];
+ bondlen = 108.7*0.0188972599;
+ angle0 = deg2rad(109.5);
+ angle1 = deg2rad(0);
+angle2 = deg2rad(120);
+angle3 = deg2rad(240);
+X=[8 8 8; 8 8 8; 8 8 8; 8 8 8; 8 8 8] + bondlen*[0 0 0; cos(angle1) sin(angle1) cos(angle0); cos(angle2) sin(angle2) cos(angle0); cos(angle3) sin(angle3) cos(angle0); 0 1 0];
+Z = [6 1 1 1 1];
+nstates = 5;
 setup(X, nstates, Z, true);
-numatoms = 2;
+numatoms = 5;
+
+% X=[8 8 8; 8+1.55 8 8];
+% nstates = 1;
+% Z = [1];
+% setup(X, nstates, Z, true);
+% numatoms = 2;
 
 W = iterate(30);
 %visualize(W, X);

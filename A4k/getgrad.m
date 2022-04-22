@@ -23,9 +23,10 @@ for k = [1:gbl_kpoints]
     Yk = Y(:,:,k);
     Wk = W(:,:,k);
     F = diag(gbl_f);
-    WdagHW = Wk'*H(Wk, n, k);
+    HW = H(Wk, n, k);
+    WdagHW = Wk'*HW;
     Htilde = usqrtinv(:,:,k)*WdagHW*usqrtinv(:,:,k);
     grad(:,:,k) = gbl_weights(k)*(...
-        (H(Wk, n, k) - O(Wk)*uinv(:,:,k)*WdagHW)*(usqrtinv(:,:,k)*F*usqrtinv(:,:,k)) + O(Wk)*(usqrtinv(:,:,k)*Q(Htilde*F - F*Htilde, U(:,:,k))));
+        (HW - O(Wk)*uinv(:,:,k)*WdagHW)*(usqrtinv(:,:,k)*F*usqrtinv(:,:,k)) + O(Wk)*(usqrtinv(:,:,k)*Q(Htilde*F - F*Htilde, U(:,:,k))));
 end
 end

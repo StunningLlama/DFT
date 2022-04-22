@@ -3,7 +3,7 @@ ewald();
 [W,E1] = iterate(20);
 getE(W)
 disp("Eigenvalues");
-[Psi, epislon] = getPsi(W);
+[Psi, epsilon] = getPsi(W);
 epsilon
 %global gbl_X;
 %Visualize(W, X);
