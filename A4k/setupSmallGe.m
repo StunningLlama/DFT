@@ -1,6 +1,6 @@
-function setupSmallGe()
+function setupSmallGe(resolution)
 
-S=[48; 48; 48];
+S=[resolution; resolution; resolution];
 a=5.66/0.52917721; %# Lattice constant (converted from angstroms to bohrs)
 R=a*diag(ones(3,1));
 
@@ -65,9 +65,13 @@ global gbl_Vdual;
 global gbl_f;
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-gbl_kpoints = 8;
-gbl_kvectors = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5]*2*pi*inv(R);
-gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
+% gbl_kpoints = 8;
+% gbl_kvectors = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5]*2*pi*inv(R);
+% gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
+
+gbl_kpoints = 1;
+gbl_kvectors = [0 0 0]*2*pi*inv(R);
+gbl_weights = [1];
 
 disp2(gbl_Gc);
 disp2(gbl_kvectors);

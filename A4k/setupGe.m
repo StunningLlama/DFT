@@ -79,9 +79,9 @@ gbl_weights = [1];
 % gbl_kvectors = K*2*pi*inv(R);
 % gbl_weights = ones(1, 27)/27;
 
-Ns=4; %# Number of states
+Ns=16; %# Number of states
 gbl_Ns = Ns;
-gbl_f=[2;2/3;2/3;2/3]; %# The usual case of a constant filling of two electrons per orbital
+gbl_f=2*ones(16,1) %# The usual case of a constant filling of two electrons per orbital
 
 lambda=18.5;
 rc=1.052;

@@ -1,4 +1,4 @@
-molecule = 3
+molecule = 2s
 if (molecule==1) % Dihelium
     X=[6 6 9; 6+1.5 6 9];
     setup(X, 1, [1 1], true);
@@ -22,7 +22,7 @@ elseif (molecule==3) % Methane
     [W,E1] = iterate(20);
     visualize(W, X);
 elseif (molecule==4) % Crystal
-    X=[1.5 1.5 1.5; 1.5+1.5 1.5 1.5];
+    X=[1.5 1.5 1.5; 1.5+1 1.5 1.5];
     setup(X, 1, [1 1], false);
     [W,E1] = iterate(30);
     visualize(W, X);

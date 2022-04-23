@@ -1,6 +1,6 @@
-function setupBigGe()
+function setupBigGe(resolution)
 
-S=[48*2; 48*2; 48*2];
+S=[resolution*2; resolution*2; resolution*2];
 a=5.66/0.52917721; %# Lattice constant (converted from angstroms to bohrs)
 R=2*a*diag(ones(3,1));
 

@@ -67,13 +67,13 @@ gbl_Vdual = Vdual;
 
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-% gbl_kpoints = 1;
-% gbl_kvectors = [0 0 0]*2*pi*inv(R);
-% gbl_weights = [1];
+ gbl_kpoints = 1;
+ gbl_kvectors = [0 0 0]*2*pi*inv(R);
+ gbl_weights = [1];
 
-gbl_kpoints = 3;
-gbl_kvectors = [0 0 0; 0.25 0 0; 0 0 0.25]*2*pi*inv(R);
-gbl_weights = [1/3, 1/3, 1/3];
+% gbl_kpoints = 3;
+% gbl_kvectors = [0 0 0; 0.25 0 0; 0 0 0.25]*2*pi*inv(R);
+% gbl_weights = [1/3, 1/3, 1/3];
 
 
 % 
