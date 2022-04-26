@@ -4,7 +4,7 @@ ewald()
 E0 = getE(W)
 
 global gbl_X;
-% visualize(W, gbl_X);
+%visualize(W, gbl_X);
 global gbl_S;
 global gbl_M;
 global gbl_kpoints;
@@ -41,9 +41,9 @@ for k = [1:gbl_kpoints]
     end
 end
 setupBigGe(32);
-Wnew = cIdag(IWnew);
+Wnew = cJcomp(IWnew);
 global gbl_X;
-% visualize(Wnew, gbl_X);
+%visualize(Wnew, gbl_X);
 disp("Energy");
 E1 = getE(Wnew)
 ratio = E1/E0

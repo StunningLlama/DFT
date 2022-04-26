@@ -34,6 +34,10 @@ for k = [1:gbl_kpoints]
         %    isosurface((1:S(1))/S(1),(1:S(2))/S(2),(1:S(3))/S(3), bigarray, 0.01);
         axis(interval);
         pause();
+        inp = input("Continue?", "s");
+        if (~isempty(inp))
+            return;
+        end
     end
 end
 end
