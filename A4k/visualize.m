@@ -11,8 +11,8 @@ global gbl_R;
 levelsets = [0.1 0.3 0.5];
 alpha = 0.2;
 interval = [0 1 0 1 0 1];
-[Psi, epsilon]=getPsi(W);
-%Psi = W;
+%[Psi, epsilon]=getPsi(W);
+Psi = W;
 for k = [1:gbl_kpoints]
     for st=1:Ns
         dat=abs(cI(Psi(:,st,k))).^2;

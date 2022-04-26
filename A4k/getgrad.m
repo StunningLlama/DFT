@@ -18,12 +18,16 @@ for k = [1:gbl_kpoints]
 end
 
 n = getn(Y, gbl_f);
+global gbl_Vdual;
+Vsp = real(gbl_Vdual) + cJdag(O(-4*pi*Linv(O(cJ(n))))) ...
+    + cJdag(O(cJ(excVWN(n)))) ...
+    + Diagprod(excpVWN(n), cJdag(O(cJ(n))));
 
 for k = [1:gbl_kpoints]
     Yk = Y(:,:,k);
     Wk = W(:,:,k);
     F = diag(gbl_f);
-    HW = H(Wk, n, k);
+    HW = H(Wk, Vsp, k);
     WdagHW = Wk'*HW;
     Htilde = usqrtinv(:,:,k)*WdagHW*usqrtinv(:,:,k);
     grad(:,:,k) = gbl_weights(k)*(...

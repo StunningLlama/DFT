@@ -14,5 +14,5 @@ ewald()
 [W,E] = iterate(30);
 getE(W)
 disp("Eigenvalues");
-[Psi, epislon] = getPsi(W);
+[Psi, epsilon] = getPsi(W);
 epsilon

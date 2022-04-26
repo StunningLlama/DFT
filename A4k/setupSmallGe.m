@@ -64,14 +64,15 @@ global gbl_Vdual;
 %# Set the orbital occupancies
 global gbl_f;
 
-global gbl_kvectors; global gbl_kpoints; global gbl_weights;
-% gbl_kpoints = 8;
-% gbl_kvectors = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5]*2*pi*inv(R);
-% gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
+global gbl_kvectors; global gbl_kpoints; global gbl_weights; global gbl_kR;
+gbl_kpoints = 8;
+gbl_kR = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5];
+gbl_kvectors = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5]*2*pi*inv(R);
+gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
 
-gbl_kpoints = 1;
-gbl_kvectors = [0 0 0]*2*pi*inv(R);
-gbl_weights = [1];
+% gbl_kpoints = 1;
+% gbl_kvectors = [0 0 0]*2*pi*inv(R);
+% gbl_weights = [1];
 
 disp2(gbl_Gc);
 disp2(gbl_kvectors);

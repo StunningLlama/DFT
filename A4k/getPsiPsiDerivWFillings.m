@@ -50,8 +50,17 @@ end
 
 dn = getdn(gbl_IY, cIdY, gbl_f);
 
+excpn = gbl_excpn;
+excppn = gbl_excppn;
+JdagOJn = gbl_JdagOJn;
+OJdN=O(cJ(dn));
+Vsp = cJdag(O(-4*pi*Linv(OJdN))) ...
+    + cJdag(O(cJ(excpn.*dn))) ...
+    + Diagprod(excppn.*dn, JdagOJn) ...
+    + Diagprod(excpn, cJdag(OJdN));
+
 for k = [1:gbl_kpoints]
-    dHW(:,:,k) = dH(Y(:,:,k), dn, k);
+    dHW(:,:,k) = dH(Y(:,:,k), Vsp, k);
 end
 
 for k = [1:gbl_kpoints]
