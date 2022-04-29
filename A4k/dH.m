@@ -1,4 +1,4 @@
-function out=dH(Y, Vsp, k)
+function out=dH(Y, dVsp, k)
 global gbl_Vdual;
 global gbl_f;
 %Y=W*inv(sqrtm(W'*O(W)));
@@ -23,6 +23,6 @@ n = gbl_n;
 IW = gbl_IW;
 out = zeros(size(Y));
 for col=1:size(Y,2)
-out(:,col) = out(:,col) + cIdag(Diagprod(Vsp, IW(:,col,k)));
+out(:,col) = out(:,col) + cIdag(Diagprod(dVsp, IW{k}(:,col)), k);
 end
 end

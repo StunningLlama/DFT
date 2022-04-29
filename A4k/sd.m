@@ -6,8 +6,8 @@ alpha = 0.001;
 for it = 1:1:Nit
     alphahigh = alpha*1.2;
     alphalow = alpha/1.2;
-    outhigh = out - alphahigh*K(getgrad(out));
-    outlow = out - alphalow*K(getgrad(out));
+    outhigh = linadd(out,K(getgrad(out)),1,-alphahigh);
+    outlow = linadd(out,K(getgrad(out)),1,-alphalow);
     Ehigh = getE(outhigh);
     Elow = getE(outlow);
     if (Elow < Ehigh)

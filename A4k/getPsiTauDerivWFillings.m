@@ -30,14 +30,14 @@ HFmFH = gbl_HFmFH;
 QHFmFH = gbl_QHFmFH;
 W = gbl_W;
 
-dHtilde = [];
-dwGradE = [];
+dHtilde = {};
+dwGradE = {};
 
 for k = [1:gbl_kpoints]
-    dHtilde(:,:,k) = Usqrtinv(:,:,k)*W(:,:,k)'*dHtau(W(:,:,k)*Usqrtinv(:,:,k), dTau);
+    dHtilde{k} = Usqrtinv{k}*W{k}'*dHtau(W{k}*Usqrtinv{k}, dTau, k);
     
-    tmp = dHtau(W(:,:,k)*Usqrtinv(:,:,k)*F*Usqrtinv(:,:,k), dTau);
-    dwGradE(:,:,k) = tmp-O(W(:,:,k)*Uinv(:,:,k)*(W(:,:,k)'*tmp)) + O(Y(:,:,k)*Q(dHtilde(:,:,k)*F-F*dHtilde(:,:,k), U(:,:,k)));
-    dwGradE(:,:,k) = dwGradE(:,:,k)*gbl_weights(k);
+    tmp = dHtau(W{k}*Usqrtinv{k}*F*Usqrtinv{k}, dTau, k);
+    dwGradE{k} = tmp-O(W{k}*Uinv{k}*(W{k}'*tmp)) + O(Y{k}*Q(dHtilde{k}*F-F*dHtilde{k}, U{k}));
+    dwGradE{k} = dwGradE{k}*gbl_weights(k);
 end
 end

@@ -29,6 +29,16 @@ r = M*inv(diag(S))*(R');
 G = 2*pi*N*inv(R);
 G2 = sum(G.^2, 2);
 
+global gbl_kvectors; global gbl_kpoints; global gbl_weights;
+ gbl_kpoints = 1;
+ gbl_kvectors = [0 0 0]*2*pi*inv(R);
+ gbl_weights = [1];
+
+% gbl_kpoints = 3;
+% gbl_kvectors = [0 0 0; 0.25 0 0; 0 0 0.25]*2*pi*inv(R);
+% gbl_weights = [1/3, 1/3, 1/3];
+
+
 %# Locate edges (assume S’s are even!) and determine max ’ok’ G2
 if any(rem(S,2)~=0)
     fprintf("Odd dimension in S, cannot continue...\n");
@@ -39,18 +49,28 @@ edges=find(any(abs(M-ones(size(M,1),1)*eS')<1,2));
 
 %# Compute active list and corresponding G2’s
 G2mx=min(G2(edges));
-active=find(G2<G2mx/4); %# Sphere is 1/2 size (but looking at G^2!)
-G2c=G2(active);
-fprintf("Compression: %f (theoretical: %f)\n", ...
-    length(G2)/length(G2c), 1/(4*pi*(1/4)^3/3));
-gbl_G2c = G2c;
-gbl_active = active;
+gbl_Ecutoff = G2mx/4;
+
+gbl_G2c = {};
+gbl_active = {};
+gbl_Gc = {};
+for k = [1:gbl_kpoints]
+    kvec = gbl_kvectors(k,:);
+    karray = ones(size(G,1),1)*kvec;
+    active=find(sum((G+karray).^2, 2)<gbl_Ecutoff); %# Sphere is 1/2 size (but looking at G^2!)
+    G2c=G2(active);
+    fprintf("Compression: %f (theoretical: %f)\n", ...
+        length(G2)/length(G2c), 1/(4*pi*(1/4)^3/3));
+    gbl_G2c{k} = G2c;
+    gbl_active{k} = active;
+    gbl_Gc{k} = G(active,:);
+end
 
 %# Computation of structure factor
 chargefactor = ones(size(G, 1), 1)*Z;
 Sf=sum(chargefactor.*exp(-i*G*X'), 2);
 
-gbl_S=S; gbl_R=R; gbl_G2=G2; gbl_G = G; gbl_Gc = G(active,:); gbl_Sf = Sf; gbl_r = r;
+gbl_S=S; gbl_R=R; gbl_G2=G2; gbl_G = G; gbl_Sf = Sf; gbl_r = r;
 
 
 global gbl_Vdual;
@@ -65,15 +85,6 @@ gbl_Vps=-4*pi./G2; gbl_Vps(1)=0.;
 Vdual=cJ(gbl_Vps.*Sf);
 gbl_Vdual = Vdual;
 
-
-global gbl_kvectors; global gbl_kpoints; global gbl_weights;
- gbl_kpoints = 1;
- gbl_kvectors = [0 0 0]*2*pi*inv(R);
- gbl_weights = [1];
-
-% gbl_kpoints = 3;
-% gbl_kvectors = [0 0 0; 0.25 0 0; 0 0 0.25]*2*pi*inv(R);
-% gbl_weights = [1/3, 1/3, 1/3];
 
 
 % 

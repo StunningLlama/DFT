@@ -1,7 +1,7 @@
-setupSmallGe(48);
+setupSmallGe(16);
 ewald()
-[W,E] = iterate(20);
-getE(W)
+W = iterate(20);
+E0 = getE(W)
 disp("Eigenvalues");
 [Psi, epsilon] = getPsi(W);
 epsilon
@@ -9,10 +9,11 @@ epsilon
 %global gbl_X;
 %Visualize(W, X);
 
-setupBigGe(48);
+setupBigGe(16);
 ewald()
-[W,E] = iterate(30);
-getE(W)
+W = iterate(30);
+E1 = getE(W)
 disp("Eigenvalues");
 [Psi, epsilon] = getPsi(W);
 epsilon
+E1/E0

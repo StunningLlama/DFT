@@ -1,6 +1,6 @@
-setupSmallGe(32);
+setupSmallGe(24);
 ewald()
-[W,E] = iterate(20);
+W = iterate(20);
 E0 = getE(W)
 
 global gbl_X;
@@ -10,15 +10,15 @@ global gbl_M;
 global gbl_kpoints;
 global gbl_kvectors;
 global gbl_kR;
-IWnew = zeros(prod(gbl_S*2), gbl_kpoints*size(W,2));
-Wnew = zeros(size(W,1), gbl_kpoints*size(W,2));
+global gbl_Ns;
+IWnew = zeros(prod(gbl_S*2), gbl_kpoints*gbl_Ns);
 indices = coordtoindex(gbl_M, gbl_S);
 coords = indextocoord(indices, gbl_S);
 for k = [1:gbl_kpoints]
-    for j = [1:size(W, 2)]
+    for j = [1:gbl_Ns]
         kvec = gbl_kR(k,:);
-        IW = cI(W(:,j,k));
-        (k-1)*size(W,2)+(j-1)+1
+        IW = cI(W{k}(:,j), k);
+        (k-1)*gbl_Ns+(j-1)+1
         for dx = [0:1]
             for dy = [0:1]
                 for dz = [0:1]
@@ -34,14 +34,14 @@ for k = [1:gbl_kpoints]
                     phases = exp(2*pi*i*sum(coordarray.*karray,2));
                     %disp2(phases);
                     %pause();
-                    IWnew(newindices,(k-1)*size(W,2)+(j-1)+1) = IW.*phases;
+                    IWnew(newindices,(k-1)*gbl_Ns+(j-1)+1) = IW.*phases;
                 end
             end
         end
     end
 end
-setupBigGe(32);
-Wnew = cJcomp(IWnew);
+setupBigGe(24);
+Wnew = {cJcomp(IWnew, 1)};
 global gbl_X;
 %visualize(Wnew, gbl_X);
 disp("Energy");

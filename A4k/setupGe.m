@@ -17,6 +17,7 @@ Z = 4*ones(1, 8);
 global gbl_S; global gbl_R; global gbl_G2; global gbl_Ns;
 global gbl_G2c; global gbl_active; global gbl_X; global gbl_G; global gbl_Gc; global gbl_Sf; global gbl_M; global gbl_r; global gbl_Z;
 global gbl_Vps;
+global gbl_Ecutoff;
 
 gbl_X = X;
 gbl_Z = Z;
@@ -46,6 +47,8 @@ edges=find(any(abs(M-ones(size(M,1),1)*eS')<1,2));
 
 %# Compute active list and corresponding G2’s
 G2mx=min(G2(edges));
+gbl_Ecutoff = G2mx;
+
 active=find(G2<G2mx/4); %# Sphere is 1/2 size (but looking at G^2!)
 G2c=G2(active);
 fprintf("Compression: %f (theoretical: %f)\n", ...

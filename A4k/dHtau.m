@@ -1,4 +1,4 @@
-function out = dHtau(W, dX)
+function out = dHtau(W, dX, k)
 global gbl_Vps;
 
 global gbl_X;
@@ -16,8 +16,8 @@ dVtilde(1)=0.;
 dVdual=cJ(dVtilde);
 
 
-out = W*0;
+out = zeros(size(W));
 for col=1:size(W,2)
-out(:,col) = out(:,col) + cIdag(Diagprod(dVdual, cI(W(:,col))));
+out(:,col) = out(:,col) + cIdag(Diagprod(dVdual, cI(W(:,col), k)), k);
 end
 end

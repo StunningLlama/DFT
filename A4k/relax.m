@@ -20,12 +20,12 @@ setup(X, nstates, Z, true);
 numatoms = 2;
 
 W = iterate(20);
-visualize(W, X);
+%visualize(W, X);
 E0 = getE(W) + ewald();
 
 tic
 %Calculate spring const analytically
-dW = [];
+dW = {};
 dX = [];
 setupPccgWavefunc(W);
 
@@ -35,14 +35,14 @@ for a = 1:(3*numatoms)
     dXi = reshape(dXi, [numatoms, 3]);
     dX(:,:,a) = dXi;
     dWi = pccgWavefunc(W, dXi, 50, 1);
-    dW(:,:,:,a) = dWi;
+    dW{a} = dWi;
 end
 
 Kanal = zeros(3*numatoms, 3*numatoms);
 
 for a = 1:(3*numatoms)
     for b = a:(3*numatoms)
-        kab = calcSpringConstant(W, X, dX(:,:,a), dX(:,:,b), dW(:,:,:,a), dW(:,:,:,b))-getdsqEwald(X, dX(:,:,a), dX(:,:,b))
+        kab = calcSpringConstant(W, X, dX(:,:,a), dX(:,:,b), dW{a}, dW{b})-getdsqEwald(X, dX(:,:,a), dX(:,:,b))
         Kanal(a,b)=kab;
         Kanal(b,a)=kab;
     end

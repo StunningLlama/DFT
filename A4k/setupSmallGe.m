@@ -17,6 +17,8 @@ Z = 4*ones(1, 8);
 global gbl_S; global gbl_R; global gbl_G2; global gbl_Ns;
 global gbl_G2c; global gbl_active; global gbl_X; global gbl_G; global gbl_Gc; global gbl_Sf; global gbl_M; global gbl_r; global gbl_Z;
 global gbl_Vps;
+global gbl_Ecutoff;
+
 
 gbl_X = X;
 gbl_Z = Z;
@@ -36,34 +38,6 @@ r = M*inv(diag(S))*(R');
 G = 2*pi*N*inv(R);
 G2 = sum(G.^2, 2);
 
-%# Locate edges (assume S’s are even!) and determine max ’ok’ G2
-if any(rem(S,2)~=0)
-    fprintf("Odd dimension in S, cannot continue...\n");
-    return;
-end
-eS=S/2+0.5;
-edges=find(any(abs(M-ones(size(M,1),1)*eS')<1,2));
-
-%# Compute active list and corresponding G2’s
-G2mx=min(G2(edges));
-active=find(G2<G2mx/4); %# Sphere is 1/2 size (but looking at G^2!)
-G2c=G2(active);
-fprintf("Compression: %f (theoretical: %f)\n", ...
-    length(G2)/length(G2c), 1/(4*pi*(1/4)^3/3));
-gbl_G2c = G2c;
-gbl_active = active;
-
-%# Computation of structure factor
-chargefactor = ones(size(G, 1), 1)*Z;
-Sf=sum(chargefactor.*exp(-i*G*X'), 2);
-
-gbl_S=S; gbl_R=R; gbl_G2=G2; gbl_G = G; gbl_Gc = G(active,:); gbl_Sf = Sf; gbl_r = r;
-
-
-global gbl_Vdual;
-%# Set the orbital occupancies
-global gbl_f;
-
 global gbl_kvectors; global gbl_kpoints; global gbl_weights; global gbl_kR;
 gbl_kpoints = 8;
 gbl_kR = [0 0 0; 0 0 0.5; 0 0.5 0; 0 0.5 0.5; 0.5 0 0; 0.5 0 0.5; 0.5 0.5 0; 0.5 0.5 0.5];
@@ -76,6 +50,45 @@ gbl_weights = [1/8 1/8 1/8 1/8 1/8 1/8 1/8 1/8];
 
 disp2(gbl_Gc);
 disp2(gbl_kvectors);
+
+%# Locate edges (assume S’s are even!) and determine max ’ok’ G2
+if any(rem(S,2)~=0)
+    fprintf("Odd dimension in S, cannot continue...\n");
+    return;
+end
+eS=S/2+0.5;
+edges=find(any(abs(M-ones(size(M,1),1)*eS')<1,2));
+
+%# Compute active list and corresponding G2’s
+G2mx=min(G2(edges));
+gbl_Ecutoff = G2mx/4;
+
+gbl_G2c = {};
+gbl_active = {};
+gbl_Gc = {};
+for k = [1:gbl_kpoints]
+    kvec = gbl_kvectors(k,:);
+    karray = ones(size(G,1),1)*kvec;
+    active=find(sum((G+karray).^2, 2)<gbl_Ecutoff); %# Sphere is 1/2 size (but looking at G^2!)
+    G2c=G2(active);
+    fprintf("Compression: %f (theoretical: %f)\n", ...
+        length(G2)/length(G2c), 1/(4*pi*(1/4)^3/3));
+    gbl_G2c{k} = G2c;
+    gbl_active{k} = active;
+    gbl_Gc{k} = G(active,:);
+end
+
+%# Computation of structure factor
+chargefactor = ones(size(G, 1), 1)*Z;
+Sf=sum(chargefactor.*exp(-i*G*X'), 2);
+
+gbl_S=S; gbl_R=R; gbl_G2=G2; gbl_G = G; gbl_Sf = Sf; gbl_r = r;
+
+
+global gbl_Vdual;
+%# Set the orbital occupancies
+global gbl_f;
+
 
 % Kb = [3 3 3]
 % ks=[0:prod(Kb)-1]';

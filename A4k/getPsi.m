@@ -2,23 +2,23 @@ function [Psi, epsilon] = getPsi(W)
 
 global gbl_f;
 global gbl_kpoints;
-Y = zeros(size(W));
+Y = {};
 
 for k = [1:gbl_kpoints]
-    Wk = W(:,:,k);
+    Wk = W{k};
     Uk = Wk'*O(Wk);
     uinv = inv(Uk)';
     usqrtinv = sqrtm(uinv);
-    Y(:,:,k) = Wk*usqrtinv;
+    Y{k} = Wk*usqrtinv;
 end
 
 n = getn(Y, gbl_f);
-Psi=zeros(size(Y));
+Psi={};
 epsilon = [];
 
 for k = [1:gbl_kpoints]
-    mu = Y(:,:,k)'*H(Y(:,:,k), n, k);
+    mu = Y{k}'*H(Y{k}, n, k);
     [D, eigenvalues]=eig(mu);
     epsilon(:,k)=real(diag(eigenvalues));
-	Psi(:,:,k) = Y(:,:,k)*D;
+	Psi{k} = Y{k}*D;
 end

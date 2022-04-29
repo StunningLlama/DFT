@@ -1,12 +1,5 @@
-function [W,E] = iterate(sdits)
-global gbl_active;
-%# Finite difference test
-global gbl_Ns;
-global gbl_kpoints;
-Ns=gbl_Ns; %# Number of states
-W=(randn(length(gbl_active),Ns, gbl_kpoints)+i*randn(length(gbl_active),Ns, gbl_kpoints));
-%more off; %# View output as it is computed
-%fdtest(W);
+function W = iterate(sdits)
+W=initializeRandomState()
 
 format long
 %# Converge

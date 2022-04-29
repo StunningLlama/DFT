@@ -1,4 +1,4 @@
-test = 7
+test = 6
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2]);
@@ -168,7 +168,7 @@ elseif (test==6) % Test conjugate gradient for perturbation
     
     dX=(randn(size(X)));
     
-    [W,E1] = iterate();
+    [W,E1] = iterate(20);
     disp("Done pt. 1");
     setupPccgWavefunc(W);
     dW = 0.001*pccgWavefunc(W, dX, 100, 1);

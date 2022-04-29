@@ -1,4 +1,4 @@
-test = 10
+test = 6
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
@@ -27,9 +27,9 @@ elseif (test == 2) % Direct FD test of dPsiPsi
     global gbl_active;
     global gbl_Ns;
     global gbl_kpoints;
-    W=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
-    dWa=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
-    dWb=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
+    W=initializeRandomState();
+    dWa=initializeRandomState();
+    dWb=initializeRandomState();
     dWa = dWa*0.00001;
     dWb = dWb*0.00001;
     
@@ -55,13 +55,13 @@ elseif (test == 2.5) % Direct FD test of dPsiPsi
     setup(X, 1, 1, true);
     %[W,E1] = iterate(20);
     rng('default');
-    rng(245);
+    rng(246);
     global gbl_active;
     global gbl_Ns;
     global gbl_kpoints;
-    W=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
-    dWa=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
-    dWa = dWa*0.00000001;
+    W=initializeRandomState();
+    dWa=initializeRandomState();
+    dWa = mult(dWa,0.0000001);
     %dWb = dWb*0.0000001;
     
     %dWa = dWa*0.000000;
@@ -71,13 +71,13 @@ elseif (test == 2.5) % Direct FD test of dPsiPsi
     
     %dwGradE = getPsiPsiDeriv(W, dWb);
     %2*real(trace(dWa'*dwGradE))
-    dGrad = getgrad(W+dWa) - getgrad(W);
+    dGrad = linadd(getgrad(linadd(W,dWa,1,1)), getgrad(W),1,-1);
     setupPccgWavefunc(W);
     disp("Phase 2:");
     dGrad2 = getPsiPsiDerivWFillings(dWa);
     %dGrad3 = getPsiPsiDeriv(W, dWa);
-    disp2(dGrad);
-    disp2(dGrad2);
+    disp2(dGrad{1});
+    disp2(dGrad2{1});
     %disp2(dGrad3);
     %A = H(W+dWa)-H(W);
     %B = dH(W, dWa) + H2(W, dWa);
@@ -88,20 +88,22 @@ elseif (test==3) %FD test dTau
     global gbl_kpoints;
     X=[8 8 8; 8+2 8 8];
     rng('default');
-    rng(254);
+    rng(255);
     dX=(randn(size(X)));
     dX = dX*0.0000001;
     
     setup(X, 1, 1, true);
-    W=(randn(length(gbl_active),gbl_Ns, gbl_kpoints)+i*randn(length(gbl_active),gbl_Ns, gbl_kpoints));
+    W=initializeRandomState();
     setupPccgWavefunc(W);
     Grad1 = getgrad(W);
     setup(X+dX, 1, 1, true);
     Grad2 = getgrad(W);
-    dGrad = Grad2-Grad1;
+    dGrad = linadd(Grad2,Grad1,1,-1);
     
     setup(X, 1, 1, true);
     dGradAnal = getPsiTauDerivWFillings(dX);
+    disp2(dGrad{1});
+    disp2(dGradAnal{1});
     %dGradAnal2 = getPsiTauDeriv(W, dX);
 elseif (test==4)
     X=[8 8 8; 8+2 8 8];
@@ -172,19 +174,23 @@ elseif (test==6) % Test conjugate gradient for perturbation
     X=[8 8 8; 8+2 8 8];
     setup(X, 1, 1, true);
     
+    rng('default');
+    rng(248);
     dX=(randn(size(X)));
     
-    [W,E1] = iterate(20);
+    W = iterate(20);
     disp("Done pt. 1");
+    %W = orthonormalize(W);
     setupPccgWavefunc(W);
-    dW = 0.001*pccgWavefunc(W, dX, 100, 1);
+    dW = mult(pccgWavefunc(W, dX, 100, 1),0.00001);
     
     
     grad1 = getgrad(W);
-    setup(X+dX*0.001, 1, 1, true);
-    grad2 = getgrad(W+dW);
-    disp2(grad1);
-    disp2(grad2);
+    setup(X+dX*0.00001, 1, 1, true);
+    %setupPccgWavefunc(W);
+    grad2 = getgrad(linadd(W,dW,1,1));
+    disp2(grad1{1});
+    disp2(grad2{1});
 
 elseif (test == 7) % Direct FD test of dTauTau
     X=[8 8 8; 8+2 8 8];

@@ -4,19 +4,21 @@
 %
 % W: starting point for test (size: prod(S) x Ns)
 % S: Dimensions of 3d data
-function fdtest(W)
+function fdtest()
+setupSmallGe(32);
+W = initializeRandomState();
 %# Compute intial energy and gradient
 E0=getE(W)
 g0=getgrad(W);
 %# Choose a random direction to explore
-dW=randn(size(W))+i*randn(size(W));
+dW=initializeRandomState();
 %# Explore a range of step sizes decreasing by powers of ten
 for delta=10.^[1:-1:-9]
 %# Directional derivative formula
-dE=delta*2*real(sum(conj(g0).*dW, 'all'));
+dE=delta*2*complexinnerprod(g0, dW);
 %# Print ratio of actual change to expected change, along with estimate
 %# of the error in this quantity due to rounding
 fprintf(' %20.16f\n %20.16f\n\n', ...
-(getE(W+delta*dW)-E0)/dE, sqrt(size(W,1))*eps/abs(dE) );
+(getE(linadd(W,dW,1,delta))-E0)/dE, sqrt(size(W{1},1))*eps/abs(dE) );
 end
 end
