@@ -1,43 +1,49 @@
 % Calculates differential of grad E given differential dTau.
-function dwGradE = getPsiTauDerivWFillings(dTau)
+function dwGradE = getPsiTauDerivWFillingsInc(dVsp, q)
 
 global gbl_f;
-global gbl_U;
-global gbl_Uinv;
-global gbl_Usqrtinv;
-global gbl_Htilde;
 global gbl_Y;
+global gbl_IW;
 global gbl_tmp1;
-global gbl_UsiFUsi;
-global gbl_WUsiFUsi;
-global gbl_HFmFH;
-global gbl_QHFmFH;
 global gbl_kpoints;
 global gbl_weights;
-global gbl_W;
+global gbl_kvectors;
+
+qc = 1;
+mqc = 2;
 
 F = diag(gbl_f);
 
-U = gbl_U;
-Uinv = gbl_Uinv;
-Usqrtinv = gbl_Usqrtinv;
-Htilde = gbl_Htilde;
 Y = gbl_Y;
 tmp1 = gbl_tmp1;
-UsiFUsi = gbl_UsiFUsi;
-WUsiFUsi = gbl_WUsiFUsi;
-HFmFH = gbl_HFmFH;
-QHFmFH = gbl_QHFmFH;
-W = gbl_W;
 
 dHtilde = {};
 dwGradE = {};
 
 for k = [1:gbl_kpoints]
-    dHtilde{k} = Usqrtinv{k}*W{k}'*dHtau(W{k}*Usqrtinv{k}, dTau, k);
+    Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
+    k_Tk_q = gbl_kvectors(k)+gbl_kvectors(Tk)+gbl_kvectors(q);
+    Tk_mk_mq = gbl_kvectors(Tk)-gbl_kvectors(k)-gbl_kvectors(q);
     
-    tmp = dHtau(W{k}*Usqrtinv{k}*F*Usqrtinv{k}, dTau, k);
-    dwGradE{k} = tmp-O(W{k}*Uinv{k}*(W{k}'*tmp)) + O(Y{k}*Q(dHtilde{k}*F-F*dHtilde{k}, U{k}));
-    dwGradE{k} = dwGradE{k}*gbl_weights(k);
+    dHY{Tk_k} = dH(gbl_IW{k}, M(k_Tk_q, dVsp{qc}), Tk);
+    dHY{k_Tk} = dH(gbl_IW{Tk}, M(Tk_mk_mq, dVsp{mqc}), k);
+end
+
+for k = [1:gbl_kpoints]
+    Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
+    dHtilde{Tk_k} = Y{Tk}'*dHY{Tk_k};
+    dHtilde{k_Tk} = Y{k}'*dHY{k_Tk};
+end
+
+for k = [1:gbl_kpoints]
+    Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
+    tmp1{Tk_k} = dHY{Tk_k}*F;
+    tmp1{k_Tk} = dHY{k_Tk}*F;
+    
+    dwGradE{Tk_k} = tmp1{Tk_k} - O(Y{Tk}*Y{Tk}'*tmp1{Tk_k}) + O(Y{Tk}*((dHtilde{Tk_k}*F-F*dHtilde{Tk_k})/2.0));
+    dwGradE{Tk_k} = dwGradE{Tk_k}*gbl_weights(k);
+    
+    dwGradE{k_Tk} = tmp1{k_Tk} - O(Y{k}*Y{k}'*tmp1{k_Tk}) + O(Y{k}*((dHtilde{k_Tk}*F-F*dHtilde{k_Tk})/2.0));
+    dwGradE{k_Tk} = dwGradE{k_Tk}*gbl_weights(k);
 end
 end

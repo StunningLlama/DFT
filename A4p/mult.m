@@ -1,7 +1,6 @@
 function out=mult(W,a)
-global gbl_kpoints;
 out = {};
-for k = [1:gbl_kpoints]
+for k = [1:size(W,2)]
     out{k} = W{k}*a;
 end
 end

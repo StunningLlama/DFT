@@ -1,4 +1,4 @@
-test = 2.5
+test = 6
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
@@ -173,7 +173,7 @@ elseif (test==5) %Test that dPsiPsi is symmetric
     %disp2(dW'*dGrad1)
 elseif (test==6) % Test conjugate gradient for perturbation
     X=[8 8 8; 8+2 8 8];
-    setup(X, 1, 1, true);
+    setup(X, 1, 1, [48; 48; 48], diag([16 16 16]), [1; 1; 1], false);
     
     rng('default');
     rng(248);
@@ -187,7 +187,7 @@ elseif (test==6) % Test conjugate gradient for perturbation
     
     
     grad1 = getgrad(W);
-    setup(X+dX*0.00001, 1, 1, true);
+    setup(X+dX*0.00001, 1, 1, [48; 48; 48], diag([16 16 16]), [1; 1; 1], false);
     %setupPccgWavefunc(W);
     grad2 = getgrad(linadd(W,dW,1,1));
     disp2(grad1{1});

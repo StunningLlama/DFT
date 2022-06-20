@@ -1,0 +1,11 @@
+setupSmallGe(48);
+%W = iterate(20);
+global gbl_R; global gbl_kS; global gbl_r;
+pk = [0.5 0 0]*2*pi*inv(gbl_R);
+p = sum(gbl_r*diag(pk),2);
+dVsp = {};
+dVsp{1} = sin(p);
+dVsp{2} = p*0;
+W = orthonormalize(W);
+setupPccgWavefuncInc(W);
+pccgWavefuncInc(W, dVsp, coordtoindex([1 0 0], gbl_kS), 20, 1);

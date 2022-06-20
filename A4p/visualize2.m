@@ -8,9 +8,9 @@ global gbl_R;
 
 %levelsets = [0.1:0.1:0.9];
 %alpha = 0.2;
-levelsets = [0.1 0.3 0.5];
+levelsets = [0.1 0.3 0.5 0.7 0.9];
 alpha = 0.2;
-%interval = [0 1 0 1 0 1];
+interval = [0 1 0 1 0 1];
 %Psi = W;
 dat=n;
 bigarray = zeros([S(2) S(1) S(3)]);
@@ -23,6 +23,6 @@ for level = levelsets
 end
 hold off;
 %    isosurface((1:S(1))/S(1),(1:S(2))/S(2),(1:S(3))/S(3), bigarray, 0.01);
-%axis(interval);
+axis(interval);
 pause();
 end
