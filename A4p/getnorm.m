@@ -1,9 +1,7 @@
 function Wnorm = getnorm(W)
-global gbl_kpoints;
-global gbl_weights;
 normsq = 0;
 elements = 0;
-for k = [1:gbl_kpoints]
+for k = [1:size(W,2)]
     normsq = normsq + sum(sum(abs(W{k}).^2));
     elements = elements + prod(size(W{k}));
 end

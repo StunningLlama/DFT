@@ -22,8 +22,8 @@ dwGradE = {};
 
 for k = [1:gbl_kpoints]
     Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
-    k_Tk_q = gbl_kvectors(k)+gbl_kvectors(Tk)+gbl_kvectors(q);
-    Tk_mk_mq = gbl_kvectors(Tk)-gbl_kvectors(k)-gbl_kvectors(q);
+    k_Tk_q = gbl_kvectors(k,:)+gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
+    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)-gbl_kvectors(q,:);
     
     dHY{Tk_k} = dH(gbl_IW{k}, M(k_Tk_q, dVsp{qc}), Tk);
     dHY{k_Tk} = dH(gbl_IW{Tk}, M(Tk_mk_mq, dVsp{mqc}), k);

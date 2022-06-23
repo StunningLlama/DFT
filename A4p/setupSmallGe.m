@@ -16,5 +16,5 @@ Z = 4*ones(1, 8);
 
 Ns=16;
 
-setup(X, Ns, Z, S, R, [2 2 2], true);
+setup(X, Ns, Z, S, R, [2; 2; 2], true);
 end

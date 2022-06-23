@@ -23,6 +23,8 @@ Vsp = real(gbl_Vdual) + cJdag(O(-4*pi*Linv(O(cJ(n))))) ...
     + cJdag(O(cJ(excVWN(n)))) ...
     + Diagprod(excpVWN(n), cJdag(O(cJ(n))));
 
+%visualize2(n);
+
 for k = [1:gbl_kpoints]
     Yk = Y{k};
     Wk = W{k};

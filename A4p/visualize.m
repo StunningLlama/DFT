@@ -1,6 +1,6 @@
-function visualize(W, X)
+function visualize(W)
 
-global gbl_S; global gbl_M; global gbl_Ns; global gbl_kpoints;
+global gbl_S; global gbl_M; global gbl_Ns; global gbl_kpoints; global gbl_X;
 S = gbl_S;
 M = gbl_M;
 Ns = gbl_Ns;
@@ -20,8 +20,8 @@ for k = [1:gbl_kpoints]
         bigarray(sub2ind(size(bigarray), M(:,2)+1, M(:,1)+1,M(:,3)+1)) = dat;
         maxamplitude = max(bigarray, [], 'all')
         
-        for a = [1:size(X,1)]
-            pos = (inv(gbl_R)*X(a,:)')';
+        for a = [1:size(gbl_X,1)]
+            pos = (inv(gbl_R)*gbl_X(a,:)')';
             fimplicit3(@(xq,yq,zq) ((xq-pos(1)).^2+(yq-pos(2)).^2+(zq-pos(3)).^2 - 0.002),'FaceColor', 'red', 'EdgeColor','none','FaceAlpha',1.0);
             hold on;
         end

@@ -2,42 +2,22 @@
 function dwGradE = getPsiTauDerivWFillings(dTau)
 
 global gbl_f;
-global gbl_U;
-global gbl_Uinv;
-global gbl_Usqrtinv;
-global gbl_Htilde;
 global gbl_Y;
-global gbl_tmp1;
-global gbl_UsiFUsi;
-global gbl_WUsiFUsi;
-global gbl_HFmFH;
-global gbl_QHFmFH;
 global gbl_kpoints;
 global gbl_weights;
-global gbl_W;
 
 F = diag(gbl_f);
 
-U = gbl_U;
-Uinv = gbl_Uinv;
-Usqrtinv = gbl_Usqrtinv;
-Htilde = gbl_Htilde;
 Y = gbl_Y;
-tmp1 = gbl_tmp1;
-UsiFUsi = gbl_UsiFUsi;
-WUsiFUsi = gbl_WUsiFUsi;
-HFmFH = gbl_HFmFH;
-QHFmFH = gbl_QHFmFH;
-W = gbl_W;
 
 dHtilde = {};
 dwGradE = {};
 
 for k = [1:gbl_kpoints]
-    dHtilde{k} = Usqrtinv{k}*W{k}'*dHtau(W{k}*Usqrtinv{k}, dTau, k);
+    dHtilde{k} = Y{k}'*dHtau(Y{k}, dTau, k);
     
-    tmp = dHtau(W{k}*Usqrtinv{k}*F*Usqrtinv{k}, dTau, k);
-    dwGradE{k} = tmp-O(W{k}*Uinv{k}*(W{k}'*tmp)) + O(Y{k}*Q(dHtilde{k}*F-F*dHtilde{k}, U{k}));
+    tmp = dHtau(Y{k}*F, dTau, k);
+    dwGradE{k} = tmp-O(Y{k}*(Y{k}'*tmp)) + O(Y{k}*(dHtilde{k}*F-F*dHtilde{k})/2.0);
     dwGradE{k} = dwGradE{k}*gbl_weights(k);
 end
 end

@@ -14,10 +14,10 @@ for k = [1:gbl_kpoints]
     
     fillings = (ones(size(IY{k}, 1), 1)*f');
     
-    k_mTinvk_mq = gbl_kvectors(k)+gbl_kvectors(Tinvk)+gbl_kvectors(qc);
-    mk_Tk_mq = gbl_kvectors(k)+gbl_kvectors(Tk)+gbl_kvectors(qc);
-    k_mTk_q = gbl_kvectors(k)+gbl_kvectors(Tk)+gbl_kvectors(qc);
-    mk_Tinvk_q = gbl_kvectors(k)+gbl_kvectors(Tinvk)+gbl_kvectors(qc);
+    k_mTinvk_mq = gbl_kvectors(k,:)-gbl_kvectors(Tinvk,:)-gbl_kvectors(q,:);
+    mk_Tk_mq = -gbl_kvectors(k,:)+gbl_kvectors(Tk,:)-gbl_kvectors(q,:);
+    k_mTk_q = gbl_kvectors(k,:)-gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
+    mk_Tinvk_q = -gbl_kvectors(k,:)+gbl_kvectors(Tinvk,:)+gbl_kvectors(q,:);
     dn{qc} = dn{qc} + M(k_mTinvk_mq, sum(fillings.*conj(IdY{Tinvk_k}).*IY{k},2))+ ...
         M(mk_Tk_mq, sum(fillings.*conj(IY{k}).*IdY{Tk_k}, 2));
     dn{mqc} = dn{mqc} + M(k_mTk_q, sum(fillings.*conj(IdY{Tk_k}).*IY{k},2))+ ...

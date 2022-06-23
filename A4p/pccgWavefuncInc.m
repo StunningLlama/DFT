@@ -4,14 +4,16 @@ function out=pccgWavefuncInc(W, dVext, q, Nit, cgform)
 %W = W*sqrtm(inv(W'*O(W)));
 alphat = 3e-5;
 
+errs = [];
+
 b = negate(getPsiTauDerivWFillingsInc(dVext, q));
 dW = b;
 for it = 1:1:Nit
     g = linadd(getPsiPsiDerivWFillingsInc(dW, q), b, 1,-1);
     
     if (it > 1)
-%        disp("Angle cosine: " + num2str(real(trace(g'*d))/sqrt(real(trace(g'*g))*real(trace(d'*d)))));
-%        disp("CG test: " + num2str(real(trace(g'*K(gprev)))/sqrt(real(trace(g'*K(g)))*real(trace(gprev'*K(gprev))))));
+        disp("Angle cosine: " + num2str(complexinnerprod(g,d)/sqrt(complexinnerprod(g,g)*complexinnerprod(d,d))));
+        disp("CG test: " + num2str(complexinnerprod(g,KInc(gprev,q))/sqrt(complexinnerprod(g,KInc(g,q))*complexinnerprod(gprev,KInc(gprev,q)))));
         
         beta = 0;
         if (cgform == 1)
@@ -34,6 +36,7 @@ for it = 1:1:Nit
     gprev = g;
     dprev = d;
     gtnorm = getnorm(mult(d,alpha));
+    errs = [errs gtnorm];
     disp2(gtnorm);
     if (it > 10)
         if (gtnorm < 1e-13)
@@ -43,3 +46,5 @@ for it = 1:1:Nit
 %    disp("Ε: " + num2str(Elist(it)));
 out = dW;
 end
+
+plot(log(errs));

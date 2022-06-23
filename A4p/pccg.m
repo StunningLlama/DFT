@@ -1,7 +1,6 @@
 function [out]=pccg(W,Nit, cgform)
 W = orthonormalize(W);
 alphat = 3e-5;
-Nit = 150;
 eprev = getE(W);
 for it = 1:1:Nit
     g = getgrad(W);
