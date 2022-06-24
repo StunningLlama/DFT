@@ -50,9 +50,11 @@ dVsp = cJdag(O(-4*pi*Linv(OJdN))) ...
     + Diagprod(excppn.*dn, JdagOJn) ...
     + Diagprod(excpn, cJdag(OJdN));
 
-%for k = [1:gbl_kpoints]
-%    dHY{k} = dH(IY{k}, dVsp, k);
-%end
+for k = [1:gbl_kpoints]
+    dHY{k} = dH(IY{k}, dVsp, k);
+end
+global TEST_B;
+TEST_B = dVsp;
 
 for k = [1:gbl_kpoints]
     dHtilde{k} = dY{k}'*H(Y{k},gbl_hsum,k) + Y{k}'*dH(IY{k}, dVsp, k) + Y{k}'*H(dY{k},gbl_hsum,k);

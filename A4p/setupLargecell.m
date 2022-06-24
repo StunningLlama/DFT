@@ -5,6 +5,9 @@ global gbl_Vps;
 
 
 global gbl_kvectors; global gbl_kpoints; global gbl_weights; global gbl_kS;
+global gbl_Ns_small;
+
+gbl_Ns_small = Ns_small;
 
 Ns_BIG = Ns_small*prod(kS);
 S_BIG = S_small.*kS;
@@ -36,14 +39,14 @@ ms_BIG=[0:prod(S_BIG)-1]';
 m1_BIG=rem(ms_BIG,S_BIG(1));
 m2_BIG=rem(floor(ms_BIG/S_BIG(1)),S_BIG(2));
 m3_BIG=rem(floor(ms_BIG/(S_BIG(1)*S_BIG(2))),S_BIG(3));
-MB_IG=[m1_BIG, m2_BIG, m3_BIG];
+M_BIG=[m1_BIG, m2_BIG, m3_BIG];
 n1_BIG=m1_BIG-(m1_BIG>S_BIG(1)/2)*S_BIG(1);
 n2_BIG=m2_BIG-(m2_BIG>S_BIG(2)/2)*S_BIG(2);
 n3_BIG=m3_BIG-(m3_BIG>S_BIG(3)/2)*S_BIG(3);
 N_BIG=[n1_BIG,n2_BIG,n3_BIG];
-gbl_M = MB_IG;
+gbl_M = M_BIG;
 
-r = M_small*inv(diag(S_small))*(R_small');
+%r = M_small*inv(diag(S_small))*(R_small');
 G0 = 2*pi*N_small*inv(R_small);
 G20 = sum(G0.^2, 2);
 
@@ -71,6 +74,9 @@ activelength = zeros(1,gbl_kpoints);
 totalindex = zeros(1,gbl_kpoints);
 activeindex = zeros(1,gbl_kpoints);
 
+global gbl_gperm; global gbl_activelength; global gbl_activeindex;
+gbl_gperm = [];
+
 for k = [1:gbl_kpoints]
     kvec = gbl_kvectors(k,:);
     karray = ones(size(G0,1),1)*kvec;
@@ -81,6 +87,7 @@ for k = [1:gbl_kpoints]
     G2full = [G2full; G2];
     Transformedcoord = Coord + (Coord<0)*diag(S_BIG);
     coordindices = coordtoindex(Transformedcoord, S_BIG)+1;
+    gbl_gperm = [gbl_gperm; coordindices];
     
     active=find(G2<gbl_Ecutoff); %# Sphere is 1/2 size (but looking at G^2!)
     G2c=G2(active);
@@ -98,22 +105,27 @@ end
 
 G = Gfull;
 G2 = G2full;
+gbl_activelength = activelength;
+gbl_activeindex = activeindex;
 
 gbl_G2c = {};
 gbl_active = {};
 gbl_Gc = {};
 for k = [1:gbl_kpoints]
-    gbl_G2c{1}(activeindex(k) + [1:activelength(k)] - 1, 1) = G2csmall{k};
+    gbl_G2c{1}([activeindex(k): activeindex(k)+activelength(k)-1], 1) = G2csmall{k};
     %gbl_active{1}(activeindex(k) + [1:activelength(k)] - 1, 1) = activesmall{k}+totalindex(k)-1;
-    gbl_active{1}(activeindex(k) + [1:activelength(k)] - 1, 1) = activesmall{k}
-    gbl_Gc{1}(activeindex(k) + [1:activelength(k)] - 1, 1:3) = Gcsmall{k};
+    gbl_active{1}([activeindex(k): activeindex(k)+activelength(k)-1], 1) = activesmall{k}
+    gbl_Gc{1}([activeindex(k): activeindex(k)+activelength(k)-1], 1:3) = Gcsmall{k};
 end
 
 G_BIG = 2*pi*N_BIG*inv(R_BIG);
+G2_BIG = sum(G_BIG.^2, 2);
 AA = G_BIG(gbl_active{1},:);
 BB = gbl_Gc{1};
 
-gbl_kS = kS;
+gbl_r = M_BIG*inv(diag(S_BIG))*(R_BIG');
+
+gbl_kS = [1;1;1];
 kms=[0:prod(kS)-1]';
 km1=rem(kms,kS(1));
 km2=rem(floor(kms/kS(1)),kS(2));
@@ -139,11 +151,20 @@ gbl_weights = 1;
 gbl_X = X;
 gbl_Z = Z;
 
+%TEST
+% G = G_BIG;
+% G2 = G2_BIG;
+% gbl_G = G_BIG;
+% gbl_G2 = G2_BIG;
+% gbl_gperm = [1:prod(S_BIG)]';
+
+
 %# Computation of structure factor
 chargefactor = ones(size(G, 1), 1)*Z;
 Sf=sum(chargefactor.*exp(-i*G*X'), 2);
 
-gbl_S=S_BIG; gbl_R=R_BIG; gbl_G2=G2; gbl_G = G; gbl_Sf = Sf; gbl_r = r;
+gbl_S=S_BIG; gbl_R=R_BIG; gbl_G2=G2; gbl_G = G; gbl_Sf = Sf;
+
 
 
 global gbl_Vdual;

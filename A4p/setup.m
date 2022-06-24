@@ -33,7 +33,7 @@ kR = kM*inv(diag(kS));
 
 gbl_kpoints = prod(kS);
 gbl_kvectors = kR*2*pi*inv(R);
-gbl_weights = ones(1,gbl_kpoints);%/gbl_kpoints;
+gbl_weights = ones(1,gbl_kpoints)/gbl_kpoints;
 
 %# Locate edges (assume S’s are even!) and determine max ’ok’ G2
 if any(rem(S,2)~=0)
@@ -61,6 +61,9 @@ for k = [1:gbl_kpoints]
     gbl_active{k} = active;
     gbl_Gc{k} = G(active,:);
 end
+
+global gbl_gperm;
+gbl_gperm = [1:prod(S)]';
 
 %# Computation of structure factor
 chargefactor = ones(size(G, 1), 1)*Z;
@@ -94,7 +97,7 @@ if (pseudopotential)
     gbl_Vdual = Vdual;
 else
     gbl_Vps=-4*pi./G2; gbl_Vps(1)=0.;
-    Vdual=cJ(gbl_Vps.*Sf);
+    Vdual=cJdag(gbl_Vps.*Sf);
     gbl_Vdual = Vdual;
 end
 

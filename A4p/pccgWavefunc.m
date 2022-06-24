@@ -50,7 +50,7 @@ for it = 1:1:Nit
             break;
         end
     end
-    visualize(dW);
+%    visualize(dW);
 %     if (it > 10)
 %         dW = gbl_dY;
 %         it = 0;

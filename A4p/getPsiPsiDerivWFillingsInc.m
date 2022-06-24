@@ -60,17 +60,18 @@ dn = getdnInc(gbl_IY, cIdY, gbl_f, q);
 
 qc = 1;
 mqc = 2;
+mq = Tinv(1, q);
 
 excpn = gbl_excpn;
 excppn = gbl_excppn;
 JdagOJn = gbl_JdagOJn;
 OJdN{qc}=O(cJ(dn{qc}));
 OJdN{mqc}=O(cJ(dn{mqc}));
-dVsp{qc} = cJdag(O(-4*pi*Linv(OJdN{qc}))) ...
+dVsp{qc} = cJdag(O(-4*pi*LinvInc(OJdN{qc},q,1))) ...
     + cJdag(O(cJ(excpn.*dn{qc}))) ...
     + Diagprod(excppn.*dn{qc}, JdagOJn) ...
     + Diagprod(excpn, cJdag(OJdN{qc}));
-dVsp{mqc} = cJdag(O(-4*pi*Linv(OJdN{mqc}))) ...
+dVsp{mqc} = cJdag(O(-4*pi*LinvInc(OJdN{mqc},mq,1))) ...
     + cJdag(O(cJ(excpn.*dn{mqc}))) ...
     + Diagprod(excppn.*dn{mqc}, JdagOJn) ...
     + Diagprod(excpn, cJdag(OJdN{mqc}));
@@ -78,19 +79,20 @@ dVsp{mqc} = cJdag(O(-4*pi*Linv(OJdN{mqc}))) ...
 for k = [1:gbl_kpoints]
     Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
     k_mTk_q = gbl_kvectors(k,:)-gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
-    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)-gbl_kvectors(q,:);
+    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)+gbl_kvectors(mq,:);
     
     dHY{Tk_k} = dH(gbl_IY{k}, M(k_mTk_q, dVsp{qc}), Tk);
     dHY{k_Tk} = dH(gbl_IY{Tk}, M(Tk_mk_mq, dVsp{mqc}), k);
 end
 
+global TEST_A;
+TEST_A = dVsp;
+
 for k = [1:gbl_kpoints]
     Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
-    k_mTk_q = gbl_kvectors(k,:)-gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
-    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)-gbl_kvectors(q,:);
     
-    dHtilde{Tk_k} = dY{k_Tk}'*H(Y{k}, gbl_hsum, k) + Y{Tk}'*dH(gbl_IY{k}, M(k_mTk_q, dVsp{qc}), Tk) + Y{Tk}'*H(dY{Tk_k}, gbl_hsum, Tk);
-    dHtilde{k_Tk} = dY{Tk_k}'*H(Y{Tk}, gbl_hsum, Tk) + Y{k}'*dH(gbl_IY{Tk}, M(Tk_mk_mq, dVsp{mqc}), k) + Y{k}'*H(dY{k_Tk}, gbl_hsum, k);
+    dHtilde{Tk_k} = dY{k_Tk}'*H(Y{k}, gbl_hsum, k) + Y{Tk}'*dHY{Tk_k} + Y{Tk}'*H(dY{Tk_k}, gbl_hsum, Tk);
+    dHtilde{k_Tk} = dY{Tk_k}'*H(Y{Tk}, gbl_hsum, Tk) + Y{k}'*dHY{k_Tk} + Y{k}'*H(dY{k_Tk}, gbl_hsum, k);
     tmp2{Tk_k} = dHY{Tk_k}*F + H(dY{Tk_k}*F+Y{Tk}*F*dUsqrtinv{Tk_k}, gbl_hsum, Tk);
     tmp2{k_Tk} = dHY{k_Tk}*F + H(dY{k_Tk}*F+Y{k}*F*dUsqrtinv{k_Tk}, gbl_hsum, k);
 end
