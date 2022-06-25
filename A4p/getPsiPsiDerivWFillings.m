@@ -13,6 +13,7 @@ global gbl_JdagOJn;
 global gbl_hsum;
 
 global gbl_dY;
+global gbl_output;
 
 F = diag(gbl_f);
 
@@ -40,6 +41,7 @@ end
 gbl_dY = dY;
 
 dn = getdn(gbl_IY, cIdY, gbl_f);
+gbl_output = dn;
 
 excpn = gbl_excpn;
 excppn = gbl_excppn;

@@ -1,12 +1,9 @@
 % out=pccgWavefunc(W, dTau, Nit, cgform)
-function out=pccgWavefunc(W, dTau, Nit, cgform)
+function out=pccgWavefuncVsp(W, dVsp, Nit, cgform)
 
-%W = W*sqrtm(inv(W'*O(W)));
 alphat = 3e-5;
 
-global gbl_dY;
-
-b = negate(getPsiTauDerivWFillings(dTau));
+b = negate(getPsiVspDerivWFillings(dVsp));
 dW = b;
 
 errs = [];
@@ -52,8 +49,6 @@ for it = 1:1:Nit
     end
     gtnormprev = gtnorm;
     out = dW;
-    
-out = dW;
 end
 
 plot(log(errs));

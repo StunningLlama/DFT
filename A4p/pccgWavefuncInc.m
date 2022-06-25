@@ -1,13 +1,14 @@
 % out=pccgWavefunc(W, dTau, Nit, cgform)
 function out=pccgWavefuncInc(W, dVext, q, Nit, cgform)
 
-%W = W*sqrtm(inv(W'*O(W)));
 alphat = 3e-5;
 
 errs = [];
 
-b = negate(getPsiTauDerivWFillingsInc(dVext, q));
+b = negate(getPsiVspDerivWFillingsInc(dVext, q));
 dW = b;
+gtnormprev = 1e99;
+
 for it = 1:1:Nit
     g = linadd(getPsiPsiDerivWFillingsInc(dW, q), b, 1,-1);
     
@@ -38,13 +39,12 @@ for it = 1:1:Nit
     gtnorm = getnorm(mult(d,alpha));
     errs = [errs gtnorm];
     disp2(gtnorm);
-    if (it > 10)
-        if (gtnorm < 1e-13)
-            break;
-        end
+    
+    if (it > 5 && gtnorm > gtnormprev)
+       break;
     end
-%    disp("Ε: " + num2str(Elist(it)));
-out = dW;
+    gtnormprev = gtnorm;
+    out = dW;
 end
 
 plot(log(errs));

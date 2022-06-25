@@ -10,6 +10,5 @@ p = sum(gbl_r*diag(pk),2);
 dVsp = {};
 dVsp{1} = sin(p);
 dVsp{2} = sin(p);
-visualize2(dVsp{1});
 setupPccgWavefuncInc(W);
 pccgWavefuncInc(W, dVsp, coordtoindex([1 0 0], gbl_kS)+1, 100, 1);

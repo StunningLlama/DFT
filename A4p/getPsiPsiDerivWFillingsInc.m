@@ -14,6 +14,7 @@ global gbl_excpn;
 global gbl_excppn;
 global gbl_JdagOJn;
 global gbl_hsum;
+global gbl_output;
 F = diag(gbl_f);
 
 Htilde = gbl_Htilde;
@@ -56,7 +57,11 @@ for k = [1:gbl_kpoints]
     cIdY{k_Tk} = cI(dY{k_Tk}, k);
 end
 
+global gbl_dY;
+gbl_dY = dY;
+
 dn = getdnInc(gbl_IY, cIdY, gbl_f, q);
+gbl_output = dn;
 
 qc = 1;
 mqc = 2;

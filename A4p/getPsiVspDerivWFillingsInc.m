@@ -1,5 +1,5 @@
 % Calculates differential of grad E given differential dTau.
-function dwGradE = getPsiTauDerivWFillingsInc(dVsp, q)
+function dwGradE = getPsiVspDerivWFillingsInc(dVsp, q)
 
 global gbl_f;
 global gbl_Y;
@@ -11,6 +11,7 @@ global gbl_kvectors;
 
 qc = 1;
 mqc = 2;
+mq = Tinv(1, q);
 
 F = diag(gbl_f);
 
@@ -22,8 +23,8 @@ dwGradE = {};
 
 for k = [1:gbl_kpoints]
     Tk = T(k,q); Tk_k = k; k_Tk = k+gbl_kpoints;
-    k_Tk_q = gbl_kvectors(k,:)+gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
-    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)-gbl_kvectors(q,:);
+    k_Tk_q = gbl_kvectors(k,:)-gbl_kvectors(Tk,:)+gbl_kvectors(q,:);
+    Tk_mk_mq = gbl_kvectors(Tk,:)-gbl_kvectors(k,:)+gbl_kvectors(mq,:);
     
     dHY{Tk_k} = dH(gbl_IW{k}, M(k_Tk_q, dVsp{qc}), Tk);
     dHY{k_Tk} = dH(gbl_IW{Tk}, M(Tk_mk_mq, dVsp{mqc}), k);

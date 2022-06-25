@@ -146,7 +146,7 @@ end
 
 gbl_kpoints = 1;
 gbl_kvectors = [0 0 0];
-gbl_weights = 1;
+gbl_weights = [1];
 
 gbl_X = X;
 gbl_Z = Z;
