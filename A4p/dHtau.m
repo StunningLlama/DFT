@@ -13,10 +13,25 @@ X = gbl_X;
 dSf = getdSf(X, dX);
 dVtilde = gbl_Vps.*dSf;
 dVtilde(1)=0.;
-dVdual=cJ(dVtilde);
+dVdual=cJdag(dVtilde);
 
 
-out = zeros(size(W));
+global gbl_K;
+global gbl_Mnl;
+global gbl_Vnl;
+global gbl_Z;
+global gbl_Gc;
+
+if (k==1)
+    chargefactor = ones(size(gbl_Gc{1}, 1), 1)*gbl_Z;
+    dSf2=sum(-i*(gbl_Gc{1}*dX').*chargefactor.*exp(-i*gbl_Gc{1}*X'), 2);
+    dK = O(cJcomp(gbl_Vnl, 1).*dSf2);
+    
+    out = dK*(gbl_Mnl*(gbl_K'*W)) + gbl_K*(gbl_Mnl*(dK'*W));
+else
+    out = zeros(size(W));
+end
+
 for col=1:size(W,2)
 out(:,col) = out(:,col) + cIdag(Diagprod(dVdual, cI(W(:,col), k)), k);
 end

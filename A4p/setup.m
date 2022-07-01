@@ -1,4 +1,4 @@
-function setup(X, Ns, Z, S, R, kS, pseudopotential)
+function setup(X, Ns, Z, S, R, kS, pseudopotential, nonlocal)
 global gbl_S; global gbl_R; global gbl_G2; global gbl_Ns;
 global gbl_G2c; global gbl_active; global gbl_X; global gbl_G; global gbl_Gc; global gbl_Sf; global gbl_M; global gbl_r; global gbl_Z;
 global gbl_Vps;
@@ -93,7 +93,8 @@ if (pseudopotential)
     Vps(1)=4*pi*(1+exp(-lambda*rc))*(rc^2/2+1/lambda^2* ...
         (pi^2/6+sum((-1).^n.*exp(-lambda*rc*n)./n.^2)));
     
-    Vdual=cJ(Vps.*Sf);
+    gbl_Vps = vps;
+    Vdual=cJdag(gbl_Vps.*Sf);
     gbl_Vdual = Vdual;
 else
     gbl_Vps=-4*pi./G2; gbl_Vps(1)=0.;
@@ -101,4 +102,23 @@ else
     gbl_Vdual = Vdual;
 end
 
+global gbl_K;
+global gbl_Vnl;
+global gbl_Mnl;
+
+if (nonlocal)
+    gbl_Vps = 0*gbl_Vps;
+    gbl_Vdual = 0*gbl_Vdual;
+    gbl_Mnl = diag([-1]);
+    dr= sqrt(sum((r - ones(prod(S), 1)*sum(R,2)'/2).^2, 2)); %# <=== CODE INSERTION # 1
+    %# Compute two normalized Gaussians (widths 0.50 and 0.75)
+    sigma1=0.25;
+    vtmp = exp(-dr.^2/(2*sigma1^2))/sqrt(2*pi*sigma1^2)^3;
+    Sf3=sum(exp(-i*gbl_G*(-sum(R,2)/2)), 2);
+    gbl_Vnl = real(cI(cJ(vtmp).*Sf3,1));
+    %gbl_Vnl = vtmp;
+    chargefactor = ones(size(gbl_Gc{1}, 1), 1)*Z;
+    Sf2=sum(chargefactor.*exp(-i*gbl_Gc{1}*X'), 2);
+    gbl_K = O(cJcomp(gbl_Vnl, 1).*Sf2);
+end
 end

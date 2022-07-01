@@ -18,7 +18,7 @@ for k = [1:gbl_kpoints]
 end
 
 n = getn(Y, gbl_f);
-global gbl_Vdual;
+global gbl_Vdual;% global gbl_Vtest;
 Vsp = real(gbl_Vdual) + cJdag(O(-4*pi*Linv(O(cJ(n))))) ...
     + cJdag(O(cJ(excVWN(n)))) ...
     + Diagprod(excpVWN(n), cJdag(O(cJ(n))));

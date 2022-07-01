@@ -27,7 +27,7 @@ for k = [1:gbl_kpoints]
         end
         %for
         for level = levelsets
-            fimplicit3(@(xq,yq,zq) (interp3(((S(1):-1:1) - 0.5)/S(1),((S(2):-1:1) - 0.5)/S(2),((S(3):-1:1) - 0.5)/S(3), bigarray-level*maxamplitude, xq, yq, zq)),'EdgeColor','none','FaceAlpha',alpha);
+            fimplicit3(@(xq,yq,zq) (interp3(((1:S(1)) - 1)/S(1),((1:S(2)) - 1)/S(2),((1:S(3)) - 1)/S(3), bigarray-level*maxamplitude, xq, yq, zq)),'EdgeColor','none','FaceAlpha',alpha);
             hold on;
         end
         hold off;

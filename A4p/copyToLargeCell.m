@@ -7,7 +7,10 @@ kS_tmp = gbl_kS;
 gbl_kS = kS_orig;
 Wbig = [];
 if (iscell(W))
-    if (size(W,2)==2)
+    if (size(W,2)==1)
+        Wbig = zeros(size(gbl_G2c{1}));
+        Wbig([gbl_activeindex(1): gbl_activeindex(1)+gbl_activelength(1)-1],1) = W{1};
+    elseif (size(W,2)==2)
         mq = Tinv(1, q);
         Wbig = zeros(size(gbl_G2c{1}));
         Wbig([gbl_activeindex(q): gbl_activeindex(q)+gbl_activelength(q)-1],1) = W{1};

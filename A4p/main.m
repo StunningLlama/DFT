@@ -1,4 +1,4 @@
-test = 6
+test = 3
 if (test==0) % Test visualization
     X=[8 8 8; 8+1.5 8 8];
     setup(X, 2, [2 2], true);
@@ -52,7 +52,7 @@ elseif (test == 2) % Direct FD test of dPsiPsi
     %Bp = H(dWa);
 elseif (test == 2.5) % Direct FD test of dPsiPsi
     X=[8 8 8; 8+2 8 8];
-    setup(X, 1, 1, [48; 48; 48], diag([16 16 16]), [2; 2; 2], false);
+    setup(X, 1, 1, [48; 48; 48], diag([16 16 16]), [1;1;1], false, true);
     %[W,E1] = iterate(20);
     rng('default');
     rng(246);
@@ -94,15 +94,17 @@ elseif (test==3) %FD test dTau
     dX=(randn(size(X)));
     dX = dX*0.0000001;
     
-    setup(X, 1, 1, true);
+    setup(X, 1, [1 1], [48; 48; 48], diag([16 16 16]), [1; 1; 1], false, true);
     W=initializeRandomState();
+    W = orthonormalize(W);
     setupPccgWavefunc(W);
     Grad1 = getgrad(W);
-    setup(X+dX, 1, 1, true);
+    setup(X+dX, 1, [1 1], [48; 48; 48], diag([16 16 16]), [1; 1; 1], false, true);
     Grad2 = getgrad(W);
     dGrad = linadd(Grad2,Grad1,1,-1);
     
-    setup(X, 1, 1, true);
+    setup(X, 1, [1 1], [48; 48; 48], diag([16 16 16]), [1; 1; 1], false, true);
+    setupPccgWavefunc(W);
     dGradAnal = getPsiTauDerivWFillings(dX);
     disp2(dGrad{1});
     disp2(dGradAnal{1});

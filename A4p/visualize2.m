@@ -18,7 +18,7 @@ bigarray(sub2ind(size(bigarray), M(:,2)+1, M(:,1)+1,M(:,3)+1)) = dat;
 maxamplitude = max(bigarray, [], 'all')
 
 for level = levelsets
-    fimplicit3(@(xq,yq,zq) (interp3(((S(1):-1:1) - 0.5)/S(1),((S(2):-1:1) - 0.5)/S(2),((S(3):-1:1) - 0.5)/S(3), bigarray-level*maxamplitude, xq, yq, zq)),'EdgeColor','none','FaceAlpha',alpha);
+    fimplicit3(@(xq,yq,zq) (interp3(((1:S(1)) - 0.5)/S(1),((1:S(2)) - 0.5)/S(2),((1:S(3)) - 0.5)/S(3), bigarray-level*maxamplitude, xq, yq, zq)),'EdgeColor','none','FaceAlpha',alpha);
     hold on;
 end
 hold off;

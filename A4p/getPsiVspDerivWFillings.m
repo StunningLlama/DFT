@@ -16,7 +16,7 @@ dwGradE = {};
 for k = [1:gbl_kpoints]
     dHtilde{k} = Y{k}'*dH(cI(Y{k},k), dVsp, k);
     
-    tmp = dH(cI(Y{k},k), dVsp, k);
+    tmp = dH(cI(Y{k}*F,k), dVsp, k);
     dwGradE{k} = tmp-O(Y{k}*(Y{k}'*tmp)) + O(Y{k}*(dHtilde{k}*F-F*dHtilde{k})/2.0);
     dwGradE{k} = dwGradE{k}*gbl_weights(k);
 end
